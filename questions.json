@@ -1,0 +1,518 @@
+[
+    {
+      "level": "A1",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Choisissez la bonne forme du verbe : Elle ___ une enseignante.",
+            "options": ["est", "suis", "sont", "êtes"],
+            "answer": "est"
+          },
+          {
+            "question": "Complétez : Je ___ (être) heureux.",
+            "options": ["suis", "es", "est", "sont"],
+            "answer": "suis"
+          },
+          {
+            "question": "Ils ___ (avoir) un chien.",
+            "options": ["a", "ont", "ai", "as"],
+            "answer": "ont"
+          },
+          {
+            "question": "Nous ___ (aller) au parc.",
+            "options": ["va", "allez", "allons", "vais"],
+            "answer": "allons"
+          },
+          {
+            "question": "Tu ___ (manger) une pomme.",
+            "options": ["manges", "mange", "mangent", "mangeons"],
+            "answer": "manges"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Quel est l'opposé de 'chaud' ?",
+            "options": ["froid", "chaud", "tiède", "brûlant"],
+            "answer": "froid"
+          },
+          {
+            "question": "Que signifie 'bonjour' ?",
+            "options": ["salutation", "adieu", "merci", "s'il vous plaît"],
+            "answer": "salutation"
+          },
+          {
+            "question": "Quel est le synonyme de 'petit' ?",
+            "options": ["minuscule", "grand", "énorme", "large"],
+            "answer": "minuscule"
+          },
+          {
+            "question": "Que signifie 'maison' ?",
+            "options": ["domicile", "voiture", "jardin", "immeuble"],
+            "answer": "domicile"
+          },
+          {
+            "question": "Quel est l'opposé de 'grand' ?",
+            "options": ["petit", "énorme", "gros", "large"],
+            "answer": "petit"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Que signifie 'merci' ?",
+            "options": ["remerciement", "salutation", "adieu", "s'il vous plaît"],
+            "answer": "remerciement"
+          },
+          {
+            "question": "Quel est le synonyme de 'ami' ?",
+            "options": ["copain", "ennemi", "voisin", "collègue"],
+            "answer": "copain"
+          },
+          {
+            "question": "Que fait-on avec un livre ?",
+            "options": ["lire", "écrire", "regarder", "écouter"],
+            "answer": "lire"
+          },
+          {
+            "question": "Que signifie 'au revoir' ?",
+            "options": ["adieu", "salutation", "bienvenue", "merci"],
+            "answer": "adieu"
+          },
+          {
+            "question": "Que fait-on à l'école ?",
+            "options": ["apprendre", "jouer", "manger", "dormir"],
+            "answer": "apprendre"
+          }
+        ]
+      }
+    },
+    {
+      "level": "A2",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Complétez : Si j'___ (être) riche, je voyagerais.",
+            "options": ["suis", "étais", "serai", "sois"],
+            "answer": "étais"
+          },
+          {
+            "question": "Choisissez la bonne conjugaison : Ils ___ (finir) leurs devoirs.",
+            "options": ["finissent", "finis", "finit", "finissons"],
+            "answer": "finissent"
+          },
+          {
+            "question": "Elle ___ (aller) à l'école tous les jours.",
+            "options": ["va", "allez", "vais", "aller"],
+            "answer": "va"
+          },
+          {
+            "question": "Nous ___ (manger) des pâtes ce soir.",
+            "options": ["mangeons", "manger", "mangent", "manges"],
+            "answer": "mangeons"
+          },
+          {
+            "question": "Tu ___ (faire) tes devoirs ce matin ?",
+            "options": ["fais", "fait", "faisons", "faites"],
+            "answer": "fais"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Que signifie 'difficile' ?",
+            "options": ["facile", "compliqué", "simple", "rapide"],
+            "answer": "compliqué"
+          },
+          {
+            "question": "Quel est le synonyme de 'content' ?",
+            "options": ["heureux", "triste", "mécontent", "satisfait"],
+            "answer": "heureux"
+          },
+          {
+            "question": "Que signifie 'réussir' ?",
+            "options": ["échouer", "gagner", "terminer", "accomplir"],
+            "answer": "accomplir"
+          },
+          {
+            "question": "Quel est l'opposé de 'lent' ?",
+            "options": ["rapide", "difficile", "facile", "calme"],
+            "answer": "rapide"
+          },
+          {
+            "question": "Que signifie 'choisir' ?",
+            "options": ["sélectionner", "refuser", "accepter", "détester"],
+            "answer": "sélectionner"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Que fait un médecin ?",
+            "options": ["soigner", "manger", "jouer", "travailler"],
+            "answer": "soigner"
+          },
+          {
+            "question": "Quel est le but d'une réunion ?",
+            "options": ["discuter", "manger", "dormir", "jouer"],
+            "answer": "discuter"
+          },
+          {
+            "question": "Que signifie 'voyager' ?",
+            "options": ["rester", "déplacer", "marcher", "explorer"],
+            "answer": "déplacer"
+          },
+          {
+            "question": "Que fait-on avec un ordinateur ?",
+            "options": ["travailler", "jouer", "regarder", "écouter"],
+            "answer": "travailler"
+          },
+          {
+            "question": "Que signifie 'partager' ?",
+            "options": ["donner", "prendre", "garder", "cacher"],
+            "answer": "donner"
+          }
+        ]
+      }
+    },
+    {
+      "level": "B1",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Complétez : Si j'___ (savoir) la vérité, je te le dirais.",
+            "options": ["sais", "savais", "saurai", "sache"],
+            "answer": "savais"
+          },
+          {
+            "question": "Choisissez la bonne forme : Elle ___ (vouloir) partir.",
+            "options": ["veut", "voulait", "voudra", "vouloir"],
+            "answer": "veut"
+          },
+          {
+            "question": "Nous ___ (devoir) finir ce projet.",
+            "options": ["devons", "devait", "devoir", "devez"],
+            "answer": "devons"
+          },
+          {
+            "question": "Ils ___ (prendre) le train chaque week-end.",
+            "options": ["prennent", "prend", "prendre", "prenez"],
+            "answer": "prennent"
+          },
+          {
+            "question": "Tu ___ (faire) attention en classe.",
+            "options": ["fais", "fait", "faisons", "faites"],
+            "answer": "fais"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Que signifie 'inattendu' ?",
+            "options": ["prévisible", "surprenant", "normal", "habituel"],
+            "answer": "surprenant"
+          },
+          {
+            "question": "Quel est le synonyme de 'complexe' ?",
+            "options": ["simple", "compliqué", "facile", "clair"],
+            "answer": "compliqué"
+          },
+          {
+            "question": "Que signifie 'persévérance' ?",
+            "options": ["abandon", "détermination", "hésitation", "facilité"],
+            "answer": "détermination"
+          },
+          {
+            "question": "Quel est l'opposé de 'optimiste' ?",
+            "options": ["pessimiste", "réaliste", "sceptique", "indifférent"],
+            "answer": "pessimiste"
+          },
+          {
+            "question": "Que signifie 'inspirer' ?",
+            "options": ["motiver", "décourager", "ignorer", "décevoir"],
+            "answer": "motiver"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Quel est le but d'un livre ?",
+            "options": ["divertir", "dormir", "manger", "travailler"],
+            "answer": "divertir"
+          },
+          {
+            "question": "Que fait-on dans un restaurant ?",
+            "options": ["manger", "travailler", "jouer", "étudier"],
+            "answer": "manger"
+          },
+          {
+            "question": "Que signifie 'organiser' ?",
+            "options": ["mettre en ordre", "désorganiser", "ignorer", "compliquer"],
+            "answer": "mettre en ordre"
+          },
+          {
+            "question": "Quel est le rôle d'un professeur ?",
+            "options": ["enseigner", "apprendre", "jouer", "manger"],
+            "answer": "enseigner"
+          },
+          {
+            "question": "Que signifie 'réfléchir' ?",
+            "options": ["penser", "agir", "réagir", "parler"],
+            "answer": "penser"
+          }
+        ]
+      }
+    },
+    {
+      "level": "B2",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Complétez : Il est important que tu ___ (être) à l'heure.",
+            "options": ["sois", "es", "suis", "seras"],
+            "answer": "sois"
+          },
+          {
+            "question": "Si nous ___ (avoir) plus de temps, nous voyagerions.",
+            "options": ["avons", "aurions", "avions", "aura"],
+            "answer": "avions"
+          },
+          {
+            "question": "Je souhaite que vous ___ (venir) à la réunion.",
+            "options": ["veniez", "viennent", "venez", "viendrez"],
+            "answer": "veniez"
+          },
+          {
+            "question": "Elle ___ (devoir) étudier pour l'examen.",
+            "options": ["doit", "devait", "devra", "devez"],
+            "answer": "doit"
+          },
+          {
+            "question": "Nous ___ (pouvoir) terminer ce projet demain.",
+            "options": ["pouvons", "pourrions", "pouvez", "pouvaient"],
+            "answer": "pouvons"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Que signifie 'analyser' ?",
+            "options": ["examiner", "ignorer", "accepter", "refuser"],
+            "answer": "examiner"
+          },
+          {
+            "question": "Quel est le synonyme de 'développer' ?",
+            "options": ["croître", "réduire", "stagner", "diminuer"],
+            "answer": "croître"
+          },
+          {
+            "question": "Que signifie 'évaluer' ?",
+            "options": ["juger", "détester", "ignorer", "accepter"],
+            "answer": "juger"
+          },
+          {
+            "question": "Quel est l'opposé de 'réussite' ?",
+            "options": ["échec", "victoire", "succès", "avantage"],
+            "answer": "échec"
+          },
+          {
+            "question": "Que signifie 'collaborer' ?",
+            "options": ["travailler ensemble", "travailler seul", "ignorer", "décourager"],
+            "answer": "travailler ensemble"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Quel est l'impact d'un discours ?",
+            "options": ["influencer", "ignorer", "décourager", "réduire"],
+            "answer": "influencer"
+          },
+          {
+            "question": "Que fait un journaliste ?",
+            "options": ["informer", "décourager", "ignorer", "jouer"],
+            "answer": "informer"
+          },
+          {
+            "question": "Que signifie 'soutenir' ?",
+            "options": ["aider", "ignorer", "détruire", "réduire"],
+            "answer": "aider"
+          },
+          {
+            "question": "Quel est le but d'une campagne publicitaire ?",
+            "options": ["promouvoir", "décourager", "ignorer", "réduire"],
+            "answer": "promouvoir"
+          },
+          {
+            "question": "Que signifie 'persuader' ?",
+            "options": ["convaincre", "décourager", "ignorer", "refuser"],
+            "answer": "convaincre"
+          }
+        ]
+      }
+    },
+    {
+      "level": "C1",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Complétez : Bien qu'il ___ (être) tard, nous continuons.",
+            "options": ["soit", "est", "était", "sera"],
+            "answer": "soit"
+          },
+          {
+            "question": "Si j'___ (savoir) que tu venais, j'aurais préparé quelque chose.",
+            "options": ["avais su", "savais", "saurais", "suis"],
+            "answer": "avais su"
+          },
+          {
+            "question": "Il est essentiel que nous ___ (réussir) cet examen.",
+            "options": ["réussissons", "réussit", "réussira", "réussissez"],
+            "answer": "réussissons"
+          },
+          {
+            "question": "Elle ___ (avoir) toujours raison dans ses arguments.",
+            "options": ["a", "avait", "aura", "aura"],
+            "answer": "a"
+          },
+          {
+            "question": "Nous ___ (devoir) nous concentrer sur l'essentiel.",
+            "options": ["devons", "devons", "devez", "devait"],
+            "answer": "devons"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Que signifie 'nuancer' ?",
+            "options": ["ajouter des détails", "simplifier", "réduire", "ignorer"],
+            "answer": "ajouter des détails"
+          },
+          {
+            "question": "Quel est le synonyme de 'réflexion' ?",
+            "options": ["pensée", "action", "réaction", "ignorance"],
+            "answer": "pensée"
+          },
+          {
+            "question": "Que signifie 'démontrer' ?",
+            "options": ["prouver", "décourager", "ignorer", "réduire"],
+            "answer": "prouver"
+          },
+          {
+            "question": "Quel est l'opposé de 'ambigu' ?",
+            "options": ["clair", "flou", "complexe", "difficile"],
+            "answer": "clair"
+          },
+          {
+            "question": "Que signifie 'éclaircir' ?",
+            "options": ["rendre clair", "compliquer", "ignorer", "réduire"],
+            "answer": "rendre clair"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Quel est l'objectif d'une recherche ?",
+            "options": ["découvrir", "ignorer", "décourager", "réduire"],
+            "answer": "découvrir"
+          },
+          {
+            "question": "Que fait un critique ?",
+            "options": ["évaluer", "ignorer", "encourager", "réduire"],
+            "answer": "évaluer"
+          },
+          {
+            "question": "Que signifie 'analyser un texte' ?",
+            "options": ["examiner en détail", "lire rapidement", "ignorer", "résumer"],
+            "answer": "examiner en détail"
+          },
+          {
+            "question": "Quel est le rôle d'un leader ?",
+            "options": ["diriger", "suivre", "ignorer", "décourager"],
+            "answer": "diriger"
+          },
+          {
+            "question": "Que signifie 'critiquer' ?",
+            "options": ["évaluer négativement", "ignorer", "apprécier", "encourager"],
+            "answer": "évaluer négativement"
+          }
+        ]
+      }
+    },
+    {
+      "level": "C2",
+      "categories": {
+        "Grammaire": [
+          {
+            "question": "Il est peu probable qu'il ___ (venir) à la fête.",
+            "options": ["vienne", "vient", "viendra", "venait"],
+            "answer": "vienne"
+          },
+          {
+            "question": "Bien que nous ___ (avoir) des doutes, nous avons décidé d'agir.",
+            "options": ["ayons", "avons", "avions", "aurons"],
+            "answer": "ayons"
+          },
+          {
+            "question": "Il est essentiel que vous ___ (comprendre) les enjeux.",
+            "options": ["comprenez", "comprenez", "compreniez", "compris"],
+            "answer": "comprenez"
+          },
+          {
+            "question": "S'il ___ (savoir) la vérité, il aurait agi différemment.",
+            "options": ["avait su", "savait", "saurait", "sait"],
+            "answer": "avait su"
+          },
+          {
+            "question": "Nous ___ (devoir) faire preuve de discernement dans nos choix.",
+            "options": ["devons", "devions", "devez", "devez"],
+            "answer": "devons"
+          }
+        ],
+        "Vocabulaire": [
+          {
+            "question": "Que signifie 'sophistiqué' ?",
+            "options": ["complexe", "simple", "facile", "ordinaire"],
+            "answer": "complexe"
+          },
+          {
+            "question": "Quel est le synonyme de 'équilibre' ?",
+            "options": ["stabilité", "instabilité", "chaos", "déséquilibre"],
+            "answer": "stabilité"
+          },
+          {
+            "question": "Que signifie 'subtil' ?",
+            "options": ["délicat", "évident", "grossier", "simple"],
+            "answer": "délicat"
+          },
+          {
+            "question": "Quel est l'opposé de 'provisoire' ?",
+            "options": ["permanent", "temporaire", "incertain", "éphémère"],
+            "answer": "permanent"
+          },
+          {
+            "question": "Que signifie 'transcender' ?",
+            "options": ["dépasser", "rester", "ignorer", "réduire"],
+            "answer": "dépasser"
+          }
+        ],
+        "Compréhension": [
+          {
+            "question": "Quel est l'objectif d'une dissertation ?",
+            "options": ["argumenter", "décrire", "narration", "résumer"],
+            "answer": "argumenter"
+          },
+          {
+            "question": "Que fait un théoricien ?",
+            "options": ["développer des idées", "appliquer des connaissances", "ignorer", "décourager"],
+            "answer": "développer des idées"
+          },
+          {
+            "question": "Que signifie 'synthétiser' ?",
+            "options": ["rassembler des informations", "séparer", "simplifier", "complexifier"],
+            "answer": "rassembler des informations"
+          },
+          {
+            "question": "Quel est le rôle d'un mentor ?",
+            "options": ["guider", "ignorer", "décourager", "rivaliser"],
+            "answer": "guider"
+          },
+          {
+            "question": "Que signifie 'disséquer' ?",
+            "options": ["analyser en détail", "ignorer", "simplifier", "réduire"],
+            "answer": "analyser en détail"
+          }
+        ]
+      }
+    }
+  ]
