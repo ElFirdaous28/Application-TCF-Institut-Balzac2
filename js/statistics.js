@@ -196,7 +196,7 @@ function usersScores() {
                                                     <div id="username" class="font-bold text-[#3D3B40] mb-3">${user.username}</div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Niveau Actuel:</p> <span>${lastNoteData ? lastNoteData.level : 'N/A'}</span></div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Note:</p> <span>${lastNoteData ? lastNoteData.noteNiveau+'/10' : 'N/A'}</span></div>
-                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span>${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'N/A'}</span></div>
+                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span id="niveau_actuel_date">${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'N/A'}</span></div>
                                                 </div>
                                             </div>
                                             <div class="text-3xl font-bold text-[#525CEB] mr-20">${lastNoteData ? lastNoteData.level : 'N/A'}</div>
@@ -211,7 +211,7 @@ function searchUser() {
     
 
     userScoreBoxes.forEach(userScoreBox => {
-        const userName = userScoreBox.querySelector('#username').textContent.toLowerCase();;
+        const userName = userScoreBox.querySelector('#username').textContent.toLowerCase();
         if (!userName.includes(searchInput)) {
             userScoreBox.style.display = "none";
         }
@@ -222,6 +222,31 @@ function searchUser() {
         usersScores();
     }
 }
+
+// Function to search users by date
+function searchByDate() {
+    const userScoreBoxes = Array.from(document.getElementById('users_score').children);
+    const dateInput = formatDateToMMDDYYYY(document.getElementById('date_search').value);
+
+    // Check each userScoreBox for matching date
+    userScoreBoxes.forEach(userScoreBox => {
+        const niveauActuelDate = userScoreBox.querySelector('#niveau_actuel_date').textContent;
+
+        // Compare the date values and hide boxes that don't match
+        console.log(niveauActuelDate);
+        console.log(dateInput);
+        
+        if (niveauActuelDate !== dateInput) {
+            userScoreBox.style.display = "none"; // Hide box if the date doesn't match
+        }
+        if(dateInput==="NaN/NaN/NaN"){
+            location.reload();            
+        }
+        
+    });
+   
+}
+
 
 function getLastNote(user) {
     for (let i = user.levels.length - 1; i >= 0; i--) {
@@ -236,7 +261,16 @@ function getLastNote(user) {
     }
     return null;  // Return null if no valid note is found
 }
+// format date
+function formatDateToMMDDYYYY(date) {
+    const d = new Date(date);
+    const month = d.getMonth() + 1; // Months are zero-based
+    const day = d.getDate();
+    const year = d.getFullYear();
 
+    // Ensure two digits for day and month
+    return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+}
 
 
 usersScores();
