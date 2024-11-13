@@ -189,7 +189,7 @@ function usersScores() {
     storedUsers.forEach(user => {
         const usersScoreElement=document.getElementById('users_score');
         const lastNoteData = getLastNote(user);
-        usersScoreElement.innerHTML+=`<div class="border border-[#BFCFE7] rounded-lg p-4 flex items-center justify-between">
+        usersScoreElement.innerHTML+=`<div data-total-score="${userTotalScoreCalculator(user)}" class="border border-[#BFCFE7] rounded-lg p-4 flex items-center justify-between">
                                             <div class="flex items-center">
                                                 <div class="bg-[#BFCFE7] rounded-full h-12 w-12 flex items-center justify-center text-[#525CEB] text-xl font-bold mr-4">${user.username.charAt(0).toUpperCase()}</div>
                                                 <div>
@@ -199,7 +199,7 @@ function usersScores() {
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span id="niveau_actuel_date">${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'N/A'}</span></div>
                                                 </div>
                                             </div>
-                                            <div class="text-3xl font-bold text-[#525CEB] mr-20">${lastNoteData ? lastNoteData.level : 'N/A'}</div>
+                                            <div class="text-3xl font-bold text-[#525CEB] mr-20 cursor-default">${lastNoteData ? lastNoteData.level : 'N/A'}</div>
                                         </div>`
     });
 }
@@ -249,9 +249,46 @@ function sortByDate() {
     });    
 }
 
-
-
 // Function to sort users by Level
+function sortByLevel() {
+    const usersScoreElement=document.getElementById('users_score');
+    const userScoreBoxes = Array.from(document.getElementById('users_score').children);
+    const levelSelect = document.getElementById('level_select').value;
+
+    // Sort the userScoreBoxes based on the date
+    userScoreBoxes.sort((a, b) => {
+        const userTotal1 = a.getAttribute('data-total-score');
+        const userTotal2 = b.getAttribute('data-total-score');
+        console.log(userTotal1,userTotal2);
+        
+
+        // Compare total scores based on the selected option
+        if (levelSelect === "low") {            
+            return userTotal1 - userTotal2; //low to high
+        } else if (levelSelect === "high") {
+            return userTotal2 - userTotal1; //high to low
+        }
+        return 0;  // No change if no valid option selected
+    });
+
+    usersScoreElement.innerHTML='';
+    userScoreBoxes.forEach((userScoreBox) => {
+        usersScoreElement.innerHTML += userScoreBox.outerHTML;
+    });  
+   
+}
+
+function userTotalScoreCalculator(user){
+    let userTotalScore=0;
+    for (let i=0; i<user.levels.length-1;i++) {
+        userTotalScore+=user.levels[i].noteNiveau;
+        if (user.levels[i].noteNiveau === 0) {
+            break;
+        }  
+    }
+    return userTotalScore;
+}
+
 
 
 function getLastNote(user) {
@@ -263,8 +300,7 @@ function getLastNote(user) {
                 level: level.level,
                 date: level.date
             };
-        }
-        
+        }  
     }
     return null;  // Return null if no valid note is found
 }
