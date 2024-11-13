@@ -123,13 +123,17 @@
             </div>
         </div>
         <div class="flex flex-col sm:flex-row items-center mb-10">
-            <input id="username_search"  onchange="searchUser()" type="text" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto">
-            <input id="date_search"  onchange="searchByDate()" type="date" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-[#3D3B40]">
+            <input id="username_search"  onchange="searchUser()" type="text" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto focus:border-[#BFCFE7] focus:text-[#3D3B40] focus:outline-none"">
+            <select id="date_select"  onchange="sortByDate()" type="date" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-[#3D3B40] px-3">
+                <option value="">----------</option>
+                <option value="recente">Plus Recente</option>
+                <option value="ancienne">Plus Ancienne</option>
+            </select>
             
-            <select class="border border-[#BFCFE7] rounded-lg p-2 w-full sm:w-auto text-[#3D3B40] focus:border-[#BFCFE7] focus:text-[#3D3B40]">
-                <option>A1</option>
-                <option>A2</option>
-                <option>B1</option>
+            <select id="date_select"  onchange="sortByLevel()"  class="border border-[#BFCFE7] rounded-lg p-2 w-full sm:w-auto text-[#3D3B40] focus:border-[#BFCFE7] focus:text-[#3D3B40] px-3">
+                <option value="">----------</option>
+                <option value="high">Niveau Eleve</option>
+                <option value="low">Niveau Bas</option>
             </select>
         </div>
         <p class="text-[#3D3B40] mb-4">Cliquez sur un utilisateur pour voir son score.</p>

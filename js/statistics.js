@@ -134,8 +134,8 @@ const users = [
             {
                 level: 'A1',
                 tentative: 0,
-                date: 0,
-                noteNiveau: 0,
+                date: new Date('2024-11-12'),
+                noteNiveau: 1,
                 GrammerCat: {
                     valide: false,
                     noteCat:0,
@@ -223,29 +223,35 @@ function searchUser() {
     }
 }
 
-// Function to search users by date
-function searchByDate() {
+// Function to sort users by date
+function sortByDate() {
+    const usersScoreElement=document.getElementById('users_score');
     const userScoreBoxes = Array.from(document.getElementById('users_score').children);
-    const dateInput = formatDateToMMDDYYYY(document.getElementById('date_search').value);
+    const dateSelect = document.getElementById('date_select').value;
 
-    // Check each userScoreBox for matching date
-    userScoreBoxes.forEach(userScoreBox => {
-        const niveauActuelDate = userScoreBox.querySelector('#niveau_actuel_date').textContent;
+    // Sort the userScoreBoxes based on the date
+    userScoreBoxes.sort((a, b) => {
+        const date1 = new Date(a.querySelector('#niveau_actuel_date').textContent.trim());
+        const date2 = new Date(b.querySelector('#niveau_actuel_date').textContent.trim());
 
-        // Compare the date values and hide boxes that don't match
-        console.log(niveauActuelDate);
-        console.log(dateInput);
-        
-        if (niveauActuelDate !== dateInput) {
-            userScoreBox.style.display = "none"; // Hide box if the date doesn't match
+        // Compare dates based on the selected option
+        if (dateSelect === "ancienne") {
+            return date1 - date2; //old to new 
+        } else if (dateSelect === "recente") {
+            return date2 - date1; //new to old
         }
-        if(dateInput==="NaN/NaN/NaN"){
-            location.reload();            
-        }
-        
+        return 0;  // No change if no valid option selected
     });
-   
+
+    usersScoreElement.innerHTML='';
+    userScoreBoxes.forEach((userScoreBox) => {
+        usersScoreElement.innerHTML += userScoreBox.outerHTML;
+    });    
 }
+
+
+
+// Function to sort users by Level
 
 
 function getLastNote(user) {
@@ -258,6 +264,7 @@ function getLastNote(user) {
                 date: level.date
             };
         }
+        
     }
     return null;  // Return null if no valid note is found
 }
