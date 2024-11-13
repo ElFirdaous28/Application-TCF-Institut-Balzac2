@@ -15,9 +15,10 @@ async function loadData() {
 
 async function init() {
     try {
-        questions = await loadData(); 
+        questions = await loadData();
+        console.log(questions)
+        localStorage.setItem('questions', JSON.stringify(questions));
         // questions = getRandomQuestions(questions, numberOfQuestions);
-        console.log(questions);
     } catch (error) {
         console.error('Error loading data:', error);
     }
@@ -40,13 +41,16 @@ function renderQuestion(level, tab_index, category) {
             contentContainer.innerHTML += `    
             <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
                 <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold">${category} ${questions.length} questions</h2>
-                <span class="text-gray-500">(3 points)</span>
+                <h2 class="text-xl font-semibold">${category} (${questions.length} questions)</h2>
+                
             </div>
             <div class="space-y-4">`
             filtered_questions.forEach((question, index) => {
                 // console.log(`index: ${filtered_questions.indexOf(question)}`)
                 // console.log(`hadak: ${index}`)
+                optionsContainer = document.createElement('div')
+                optionsContainer.classList.add('options-container')
+                optionsContainer.id = `question-${index}`
                 contentContainer.innerHTML += `
                 <div id="q-${index}" class="question-container bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <div class="flex justify-between items-center mb-2">
@@ -74,8 +78,9 @@ function renderQuestion(level, tab_index, category) {
                     else 
                         answerDiv.innerHTML = `<i class="fas fa-times text-red-500"></i><span>`;
                     answerDiv.innerHTML += `<span class="text-sm">${answer}</span>`;
-                    document.querySelector(`#q-${index}`).appendChild(answerDiv);
+                    optionsContainer.appendChild(answerDiv)
                 })
+                document.querySelector(`#q-${index}`).appendChild(optionsContainer);
 
                 contentContainer.innerHTML += `</div>`;
             });
@@ -125,6 +130,42 @@ previewBtns.forEach(btn => {
 /* Editing */
     
 let currentEditingIndex = null;
+/** 
+editBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        currentEditingIndex = e.target.id.slice(-1);
+        const question = filtered_questions[currentEditingIndex];
+        let optionsContainer = document.querySelector(`#question-${currentEditingIndex}`)
+        
+        // Populate the modal fields
+        document.getElementById('question').value = question.question;
+        // optionsContainer.innerHTML = ''; 
+        //         question.options.forEach((answer, index) => {
+        //             let answerDiv = document.createElement('div')
+        //             answerDiv.classList.add('flex',  'items-center', 'space-x-2');
+        //             if (answer == question.answer)
+        //                 answerDiv.innerHTML = `<i class="fas fa-check text-green-500"></i><span>`;
+        //             else 
+        //                 answerDiv.innerHTML = `<i class="fas fa-times text-red-500"></i><span>`;
+        //             answerDiv.innerHTML += `<span class="text-sm">${answer}</span>`;
+        //             optionsContainer.appendChild(answerDiv)
+        //         })
+        
+        question.options.forEach((option, index) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.classList.add('option-input');
+            optionDiv.innerHTML = `
+                <input type="text" class="option" value="${option}" placeholder="Enter option" />
+                <input type="radio" name="correctAnswer" value="${index}" ${option === question.answer ? 'checked' : ''} />
+            `;
+            optionsContainer.appendChild(optionDiv);
+        });
+
+        // Show the modal
+        document.getElementById('editModal').classList.remove('hidden');
+    });
+});
+*/
 
 editBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -133,11 +174,67 @@ editBtns.forEach(btn => {
 
         // Populate the modal fields
         document.getElementById('question').value = question.question;
-        document.getElementById('options').value = question.options.join(', ');
+        const optionsContainer = document.getElementById('optionsContainer');
+        optionsContainer.innerHTML = ''; // Clear existing options
+
+        question.options.forEach((option, index) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.classList.add('option-input');
+            optionDiv.innerHTML = `
+                <input type="text" class="option" value="${option}" placeholder="Enter option" />
+                <input type="radio" name="correctAnswer" value="${index}" ${option === question.answer ? 'checked' : ''} />
+            `;
+            optionsContainer.appendChild(optionDiv);
+        });
 
         // Show the modal
         document.getElementById('editModal').classList.remove('hidden');
+
     });
+});
+
+
+
+// Save changes
+document.getElementById('saveChanges').addEventListener('click', () => {
+    const updatedQuestion = document.getElementById('question').value;
+    const options = Array.from(document.querySelectorAll('.option')).map(optionInput => optionInput.value);
+    console.log(options)
+    
+    // Get the selected correct answer
+    const correctAnswerIndex = Array.from(document.querySelectorAll('input[name="correctAnswer"]')).findIndex(radio => radio.checked);
+    
+    // Update the question object
+    if (currentEditingIndex !== null) {
+        filtered_questions[currentEditingIndex].question = updatedQuestion;
+        filtered_questions[currentEditingIndex].options = options;
+        
+        correctAnswer = options[correctAnswerIndex];
+        filtered_questions[currentEditingIndex].answer = correctAnswer // Update correct answer
+        console.log(`correct Answer: ${correctAnswer}`)
+
+        // Update the DOM directly
+        const questionContainer = document.querySelector(`#q-${currentEditingIndex}`);
+        const optionsContainer = document.querySelector(`#question-${currentEditingIndex}`);
+        questionContainer.querySelector('p').textContent = updatedQuestion;
+        optionsContainer.innerHTML = ''
+
+        options.forEach(answer => {
+                    let answerDiv = document.createElement('div')
+                    answerDiv.classList.add('flex',  'items-center', 'space-x-2');
+                    // console.log(`${answer} || ${question.answer}`);
+                    if (answer == correctAnswer)
+                        answerDiv.innerHTML = `<i class="fas fa-check text-green-500"></i><span>`;
+                    else 
+                        answerDiv.innerHTML = `<i class="fas fa-times text-red-500"></i><span>`;
+                    answerDiv.innerHTML += `<span class="text-sm">${answer}</span>`;
+                    optionsContainer.appendChild(answerDiv)
+                })
+
+    }
+
+    // Close the modal
+    document.getElementById('editModal').classList.add('hidden');
 });
 
 // Close modal
@@ -145,34 +242,6 @@ document.querySelector('.close-btn').addEventListener('click', () => {
     document.getElementById('editModal').classList.add('hidden');
 });
 
-// Save changes
-document.getElementById('saveChanges').addEventListener('click', () => {
-    const updatedQuestion = document.getElementById('question').value;
-    const updatedOptions = document.getElementById('options').value.split(',').map(option => option.trim());
-
-    // Update the question object
-    if (currentEditingIndex !== null) {
-        filtered_questions[currentEditingIndex].question = updatedQuestion;
-        filtered_questions[currentEditingIndex].options = updatedOptions;
-
-        // Update the DOM directly
-        const questionContainer = document.querySelector(`#q-${currentEditingIndex}`);
-        questionContainer.querySelector('p').textContent = updatedQuestion;
-
-        // Update options in the DOM
-        const optionsContainer = questionContainer.querySelector('.space-y-1');
-        optionsContainer.innerHTML = ''; // Clear existing options
-        updatedOptions.forEach(answer => {
-            let answerDiv = document.createElement('div');
-            answerDiv.classList.add('flex', 'items-center', 'space-x-2');
-            answerDiv.innerHTML = `<span class="text-sm">${answer}</span>`;
-            optionsContainer.appendChild(answerDiv);
-        });
-    }
-
-    // Close the modal
-    document.getElementById('editModal').classList.add('hidden');
-});
 
 /* Deleting */
 
