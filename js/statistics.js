@@ -28,7 +28,7 @@ const users = [
         levels: [
             {
                 level: 'A1',
-                tentative: 0,
+                tentative: 2,
                 date: Date.now(),
                 noteNiveau: 10,
                 GrammerCat: {
@@ -133,7 +133,7 @@ const users = [
         levels: [
             {
                 level: 'A1',
-                tentative: 0,
+                tentative: 3,
                 date: new Date('2024-11-12'),
                 noteNiveau: 1,
                 GrammerCat: {
@@ -170,6 +170,45 @@ const users = [
                     ]
                 }
             },
+            {
+                level: 'A2',
+                tentative: 0,
+                date: Date.now(),
+                noteNiveau: 0,
+                GrammerCat: {
+                    valide: false,
+                    noteCat:0,
+                    responses: [
+                        { questionId: 16, chosenAnswer: "étais", time: 0 },
+                        { questionId: 17, chosenAnswer: "finis", time: 0 },
+                        { questionId: 18, chosenAnswer: "vais", time: 0 },
+                        { questionId: 19, chosenAnswer: "mangent", time: 0 },
+                        { questionId: 20, chosenAnswer: "faisons", time: 0 }
+                    ]
+                },
+                VocabulaireCat: {
+                    valide: false,
+                    noteCat:0,
+                    responses: [
+                        { questionId: 21, chosenAnswer: "froid", time: 0 },
+                        { questionId: 22, chosenAnswer: "adieu", time: 0 },
+                        { questionId: 23, chosenAnswer: "grand", time: 0 },
+                        { questionId: 24, chosenAnswer: "voiture", time: 0 },
+                        { questionId: 25, chosenAnswer: "gros", time: 0 }
+                    ]
+                },
+                ComprehensionCat: {
+                    valide: false,
+                    noteCat:0,
+                    responses: [
+                        { questionId: 26, chosenAnswer: "salutation", time: 0 },
+                        { questionId: 27, chosenAnswer: "voisin", time: 0 },
+                        { questionId: 28, chosenAnswer: "écouter", time: 0 },
+                        { questionId: 29, chosenAnswer: "bienvenue", time: 0 },
+                        { questionId: 30, chosenAnswer: "manger", time: 0 }
+                    ]
+                }
+            },
         ]
     }
 ];
@@ -183,7 +222,6 @@ const storedUsers = JSON.parse(localStorage.getItem("users"));
 
 
 // Function to display users score
-
 function usersScores() {
     // Iterate over storedUsers array directly
     storedUsers.forEach(user => {
@@ -318,3 +356,46 @@ function formatDateToMMDDYYYY(date) {
 
 usersScores();
 
+
+
+// dsiplay level boxes
+
+function levelsStatistics(){
+
+    levels=['A1','A2','B1','B2','C1','C2'];
+    const levelsBoxesContainer = document.getElementById('levels_boxes_container');
+    levels.forEach((level)=>{
+        levelsBoxesContainer.innerHTML+=`<div class="border border-[#BFCFE7] rounded-lg flex items-end justify-center gap-8 py-12">
+                                            <div class="text-4xl font-bold text-[#525CEB]">${level}</div>
+                                            <div>
+                                                <div class="flex">
+                                                    <p class="w-20">Tentatives</p>
+                                                    <span>${tentativesByLevel(level)}</span>
+                                                </div>
+                                                <div class="flex">
+                                                    <p class="w-20">Au niveau</p>
+                                                    <span>10</span>
+                                                </div>
+                                                <div class="flex">
+                                                    <p class="w-20">Réussites</p>
+                                                    <span>10</span>
+                                                </div>
+                                            </div>
+                                        </div>`
+    });
+
+}
+levelsStatistics();
+
+
+function tentativesByLevel(l){
+    let levelTentativ = 0;
+    storedUsers.forEach((user)=>{
+        user.levels.forEach((level)=>{
+            if(level.level===l){
+                levelTentativ+=level.tentative;
+            }
+        });
+    });
+    return levelTentativ;    
+}
