@@ -135,7 +135,7 @@ const users = [
                 level: 'A1',
                 tentative: 3,
                 date: new Date('2024-11-12'),
-                noteNiveau: 1,
+                noteNiveau: 10,
                 GrammerCat: {
                     valide: false,
                     noteCat:0,
@@ -234,7 +234,7 @@ function usersScores() {
                                                     <div id="username" class="font-bold text-[#3D3B40] mb-3">${user.username}</div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Niveau Actuel:</p> <span>${lastNoteData ? lastNoteData.level : 'N/A'}</span></div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Note:</p> <span>${lastNoteData ? lastNoteData.noteNiveau+'/10' : 'N/A'}</span></div>
-                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span id="niveau_actuel_date">${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'N/A'}</span></div>
+                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span id="niveau_actuel_date">${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'pas encore commence'}</span></div>
                                                 </div>
                                             </div>
                                             <div class="text-3xl font-bold text-[#525CEB] mr-20 cursor-default">${lastNoteData ? lastNoteData.level : 'N/A'}</div>
@@ -332,7 +332,7 @@ function userTotalScoreCalculator(user){
 function getLastNote(user) {
     for (let i = user.levels.length - 1; i >= 0; i--) {
         const level = user.levels[i];
-        if (level.noteNiveau !== 0) {
+        if (level.noteNiveau !== 10 && i<user.levels.length) {
             return {
                 noteNiveau: level.noteNiveau,
                 level: level.level,
@@ -369,16 +369,16 @@ function levelsStatistics(){
                                             <div class="text-4xl font-bold text-[#525CEB]">${level}</div>
                                             <div>
                                                 <div class="flex">
-                                                    <p class="w-20">Tentatives</p>
-                                                    <span>${tentativesByLevel(level)}</span>
-                                                </div>
-                                                <div class="flex">
                                                     <p class="w-20">Au niveau</p>
                                                     <span>${usersAtLevel(level)}</span>
                                                 </div>
                                                 <div class="flex">
+                                                    <p class="w-20">Tentatives</p>
+                                                    <span>${tentativesByLevel(level)}</span>
+                                                </div>
+                                                <div class="flex">
                                                     <p class="w-20">Réussites</p>
-                                                    <span>10</span>
+                                                    <span>${usersSucceed(level)}</span>
                                                 </div>
                                             </div>
                                         </div>`
@@ -387,7 +387,7 @@ function levelsStatistics(){
 }
 levelsStatistics();
 
-
+// calculate number of tentatives in a level
 function tentativesByLevel(l){
     let levelTentativ = 0;
     storedUsers.forEach((user)=>{
@@ -409,5 +409,18 @@ function usersAtLevel(l){
         }
     });
     return usersAtLevel;
+}
+
+// calculate number of users succeed a level
+function usersSucceed(l){
+    let usersSucceed = 0;
+    storedUsers.forEach((user)=>{
+        user.levels.forEach((level)=>{
+            if(level.level===l && level.noteNiveau===10){
+                usersSucceed++;
+            }
+        });
+    });
+    return usersSucceed;    
 }
 
