@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Explore your French proficiency with our interactive platform! Based on the TCF framework, this tool offers scorezes, immediate feedback, and tracks your progress across levels from A1 to C2. Start your language journey with us today.">
+    <meta
+      name="keywords"
+      content="French proficiency test, TCF quiz, French language levels, Institut Balzac, language assessment, French quiz A1 to C2, French learning, test de connaissance du français, interactive French test, French skills evaluation">
+
+    <title>Document</title>
+    <script src="../tailwind.js"></script>
+  </head>
+  <body>
+    <div>
+      <!--  -->
+      <div class="sm:w-full lg:w-3/4 md:w-3/4 mx-auto mt-10 flex flex-col items-center">
+        <div class="inline-block text-center">
+            <h1 class="text-3xl text-[#525CEB] font-semibold mb-1">Rapport de <span>username</span></h1>
+            <div class="h-1 bg-[#525CEB] w-full mt-1"></div>
+        </div>
+      </div>
+    
+    
+          <!-- score section starts -->
+           <div id="contentToDownload" class="sm:w-full lg:w-3/4 md:w-3/4 mx-auto pt-20 mb-10 flex flex-col gap-16 text-[#3D3B40]">
+            <!-- Résultat  Du Quiz -->
+             <div>
+              <h1 class="text-4xl font-semibold">Résultat  Du Quiz:</h1>
+              <div class="flex justify-between lg:pr-20 mt-10 lg:mt-0 md:mt-0">
+                <!-- note level & time -->
+                <div class="text-xl mt-12">
+                  <div class="flex">
+                    <p class="w-20">Niveau</p>
+                    <span id="niveau">B1</span>
+                  </div>
+                  <div class="flex">
+                    <p class="w-20">Points</p>
+                    <p class="w-30"><span id="points">8</span>/10</p>
+                  </div>
+                  <div class="flex">
+                    <p class="w-20">Durée</p>
+                    <span id="duree">01:10</span>
+                  </div>
+                </div>
+                <!-- pourcentage cercle -->
+                <div class="relative">
+                  <div id="cercle_level" class="w-44 h-44 rounded-full" style="background: conic-gradient(#525CEB 0% 80%, #BFCFE7 80% 100%);"></div>
+                  <div class="w-40 h-40 bg-white rounded-full absolute inset-0 m-auto flex items-center justify-center">
+                    <span id="moyenne" class="font-semibold text-4xl text-[#525CEB]">80%</span>
+                  </div>          
+                </div>
+      
+              </div>
+             </div>
+             <!-- correct &not correct answers number -->
+             <div class="m-auto lg:m-0 md:m-0 flex flex-col gap-y-20 lg:flex-row md:flex-row justify-between">
+              <!-- correct -->
+              <div class="max-w-72 flex-grow flex flex-col justify-center items-center border-2 border-[#BFCFE7] rounded-xl text-2xl h-56 px-4 lg:px-6 md:px-6">
+                  <div>
+                      <svg width="125" height="125" viewBox="0 0 208 214" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <mask id="mask0_59_80" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="208" height="214">
+                              <path d="M34.6668 108.877L74.6666 149.683L164.667 57.8701" stroke="black" stroke-width="12"/>
+                          </mask>
+                          <g mask="url(#mask0_59_80)">
+                              <rect x="-195.52" y="-230.769" width="549.12" height="675.214" fill="#525CEB"/>
+                          </g>
+                      </svg>
+                  </div>
+                  <p class="mb-5">Réponses Correctes</p>
+                  <p class="mb-5"><span id="nbr_correct">8</span>/10</p>
+              </div>
+              <!-- timeout -->
+              <div class="max-w-72 flex-grow flex flex-col justify-center items-center border-2 border-[#BFCFE7] rounded-xl text-2xl h-56 px-4 lg:px-6 md:px-6">
+                  <div>
+                      <svg width="110" height="110" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#525CEB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 6V12" stroke="#525CEB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.24 16.24L12 12" stroke="#525CEB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                  </div>
+                  <p class="mb-5">Non Répondues</p>
+                  <p class="mb-5"><span id="non_repondu">0</span>/10</p>
+              </div>
+              <!-- incorrect -->
+              <div class="max-w-72 flex-grow flex flex-col justify-center items-center border-2 border-[#BFCFE7] rounded-xl text-2xl h-56 px-4 lg:px-6 md:px-6">
+                  <div class="mt-9">
+                      <svg width="68" height="68" viewBox="0 0 125 139" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <mask id="mask0_59_82" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="125" height="140">
+                              <g clip-path="url(#clip0_59_82)">
+                                  <path d="M116.694 0.758301L62.5803 60.7312L8.46677 0.758301L0.180298 9.88188L54.3219 69.8839L0.180298 129.888L8.46677 139.007L62.5803 79.0362L116.694 139.007L124.98 129.888L70.8387 69.8839L124.98 9.88188L116.694 0.758301Z" fill="black"/>
+                              </g>
+                          </mask>
+                          <g mask="url(#mask0_59_82)">
+                              <rect x="-198.682" y="-122.007" width="549.12" height="451.244" fill="#525CEB"/>
+                          </g>
+                          <defs>
+                              <clipPath id="clip0_59_82">
+                                  <rect width="124.8" height="138.249" fill="white" transform="translate(0 0.758301)"/>
+                              </clipPath>
+                          </defs>
+                      </svg>
+                  </div>
+                  <p class="mb-5 mt-5">Réponses Incorrectes</p>
+                  <p class="mb-5"><span id="nbr_incorrect">2</span>/10</p>
+              </div>
+          </div>
+          
+      
+              <!-- Bilan du Quiz -->
+               <div id="bilan_du_quiz" class=" flex flex-col mx-6 lg:mx-0 md:mx-0 gap-y-10">
+                  <div class="flex flex-row justify-between">
+                      <h1 class="text-4xl font-semibold">Bilan du Quiz:</h1>
+                      <div class="flex items-end">
+                          <!-- level select -->
+                              <select name="level" id="" class= "w-28">
+                              <option value="A1">A1</option>
+                              <option value="A2">A2</option>
+                              <option value="B1">B1</option>
+                          </select>
+                          <!-- category select -->
+                          <select name="category" id="">
+                              <option value="Grammaire">Grammaire</option>
+                              <option value="Vocabulaire">Vocabulaire</option>
+                              <option value="Comprehension">Comprehension</option>
+                          </select>
+                      </div>
+                  </div>
+                <!-- questions and answers will appear here -->
+               </div>
+           </div>
+           <!-- download button -->
+           <div class="sm:w-full lg:w-3/4 md:w-3/4 mx-auto mt-10 flex  justify-end">
+            <button id="downloadBtns" class="border-2 border-[#BFCFE7] rounded-full px-5 pt-1 pb-2 text-[#3D3B40] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]">Télécharger Le Bilan</button>
+          </div>
+           <!-- show more button -->
+           <div class="flex justify-center">
+            <button id="show_more" class="mb-10 border-2 border-[#BFCFE7] rounded-full px-5 pt-1 pb-2 text-[#3D3B40] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]">Afficher Plus</button>
+          </div>
+          
+    </div>
+
+    <!-- score section ends -->
+     <script src="js/score.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+     <script>
+      document.getElementById('downloadBtns').addEventListener('click', function () {
+    const element = document.getElementById('contentToDownload');
+    html2pdf()
+        .from(element)
+        .save('bilan-quiz.pdf');
+});
+
+     </script>
+
+  </body>
+</html>
