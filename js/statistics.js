@@ -374,7 +374,7 @@ function levelsStatistics(){
                                                 </div>
                                                 <div class="flex">
                                                     <p class="w-20">Au niveau</p>
-                                                    <span>10</span>
+                                                    <span>${usersAtLevel(level)}</span>
                                                 </div>
                                                 <div class="flex">
                                                     <p class="w-20">Réussites</p>
@@ -399,3 +399,15 @@ function tentativesByLevel(l){
     });
     return levelTentativ;    
 }
+// calculate number of users at this level
+function usersAtLevel(l){
+    let usersAtLevel=0;
+    storedUsers.forEach((user)=>{
+        const lastNoteData = getLastNote(user);
+        if(lastNoteData.level===l){
+            usersAtLevel++;
+        }
+    });
+    return usersAtLevel;
+}
+
