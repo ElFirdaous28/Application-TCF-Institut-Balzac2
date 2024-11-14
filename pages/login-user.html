@@ -92,8 +92,10 @@
         if (username) {
           if (existingUser) {
             // User exists, redirect to questions page
-            window.location.href = "questions.html";
-          } else {
+            window.location.href = "Userquestions.html";
+            localStorage.setItem("nameOFuser" , username );
+          } 
+          else {
             // Generate a unique ID and create a new user object
             const userId = generateId();
             const user = {
@@ -103,32 +105,34 @@
                 A1: {
                   tentative: 0,
                   date: 0,
-                  GrammerCat: { valide: false, responses: [] },
-                  VocabulaireCat: { valide: false, responses: [] },
-                  ComprehensionCat: { valide: false, responses: [] },
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
                 },
-                A2: {
+                A2:  {
                   tentative: 0,
                   date: 0,
-                  GrammerCat: { valide: false, responses: [] },
-                  VocabulaireCat: { valide: false, responses: [] },
-                  ComprehensionCat: { valide: false, responses: [] },
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
                 },
-                A2: {
+                A2:  {
                   tentative: 0,
                   date: 0,
-                  GrammerCat: { valide: false, responses: [] },
-                  VocabulaireCat: { valide: false, responses: [] },
-                  ComprehensionCat: { valide: false, responses: [] },
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
                 },
               },
             };
             // Add new user to data array and save to local storage
             data.push(user);
+            
             localStorage.setItem("userAccount", JSON.stringify(data));
+            localStorage.setItem("nameOFuser" , username );
 
             // Redirect to user page
-            window.location.href = "questions.html";
+            window.location.href = "Userquestions.html";
           }
         } else {
           // Display error message if name is empty
