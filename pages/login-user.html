@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quiz TCF Français</title>
+    <script src="../tailwind.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .error-message {
+        color: #ff4d4f;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen">
+    <div
+      class="rounded-lg shadow-xl flex flex-col md:flex-row w-11/12 md:w-3/4 max-w-4xl"
+    >
+      <div
+        class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center"
+      >
+        <img
+          alt="Illustration of two people with a large question mark"
+          class="mb-4"
+          height="300"
+          src="https://storage.googleapis.com/a1aa/image/jeL6IUrMTgwtCiw7ct6mY1NV7Ad1ClS2jVT0mDjceQ4sBNwTA.jpg"
+          width="300"
+        />
+        <h2 class="text-xl font-semibold text-center mb-2">
+          Take a Quiz be more creative in your work
+        </h2>
+      </div>
+      <div class="w-full md:w-1/2 p-8 bg-white rounded-r-lg">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-2xl font-semibold">Welcome to Quiz TCF Français</h1>
+        </div>
+        <p class="text-gray-400 mb-6">Login or Create Account</p>
+        <form onsubmit="return createAccount(event)">
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-2" for="name">
+              Enter Name
+            </label>
+            <input
+              class="w-full border border-gray-300 rounded-lg px-4 py-2"
+              id="name"
+              type="text"
+            />
+          </div>
+
+          <button class="w-full bg-[#7B61FF] text-white rounded-lg px-4 py-2">
+            Login / Create Account
+          </button>
+          <!-- Error message container -->
+          <p id="error-message" class="error-message">
+            Invalid credentials. Please try again.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <script>
+    
+      function createAccount(event) {
+        event.preventDefault();
+
+        function generateId() {
+          return Math.floor(Math.random() * 200) + 1;
+        }
+
+        const username = document.getElementById("name").value.trim();
+        const errorMessage = document.getElementById("error-message");
+
+        // Retrieve existing users from local storage
+        let data = JSON.parse(localStorage.getItem("userAccount")) || [];
+
+        // Check if user already exists
+        const existingUser = data.find((user) => user.username === username);
+
+        if (username) {
+          if (existingUser) {
+            // User exists, redirect to questions page
+            window.location.href = "Userquestions.html";
+            localStorage.setItem("nameOFuser" , username );
+          } 
+          else {
+            // Generate a unique ID and create a new user object
+            const userId = generateId();
+            const user = {
+              id: userId,
+              username: username,
+              levels: {
+                A1: {
+                  tentative: 0,
+                  date: 0,
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
+                },
+                A2:  {
+                  tentative: 0,
+                  date: 0,
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
+                },
+                A2:  {
+                  tentative: 0,
+                  date: 0,
+                  Grammaire: { valide: false, responses: [] },
+                  Vocabulaire: { valide: false, responses: [] },
+                  Compréhension: { valide: false, responses: [] },
+                },
+              },
+            };
+            // Add new user to data array and save to local storage
+            data.push(user);
+            
+            localStorage.setItem("userAccount", JSON.stringify(data));
+            localStorage.setItem("nameOFuser" , username );
+
+            // Redirect to user page
+            window.location.href = "Userquestions.html";
+          }
+        } else {
+          // Display error message if name is empty
+          errorMessage.textContent = "Please enter your name.";
+          errorMessage.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>
