@@ -142,7 +142,11 @@ function displayPreview(question) {
 }
 
 // Open edit modal and populate fields
+let currentEditingIndex = null; // Declare in the global scope
+
+// Open edit modal and populate fields
 function openEditModal(index) {
+    currentEditingIndex = index; // Set the current editing index
     const question = getFilteredQuestions(0, 0)[index]; // Adjust level and tab index as needed
     document.getElementById('question').value = question.question;
     const optionsContainer = document.getElementById('optionsContainer');
@@ -161,6 +165,50 @@ function openEditModal(index) {
     document.getElementById('editModal').classList.remove('hidden');
 }
 
+// Save changes made in the edit modal
+document.getElementById('saveChanges').addEventListener('click', () => {
+    if (currentEditingIndex !== null) { // Check if an index is set
+        const updatedQuestion = document.getElementById('question').value;
+        const options = Array.from(document.querySelectorAll('.option')).map(optionInput => optionInput.value);
+        const correctAnswerIndex = Array.from(document.querySelectorAll('input[name="correctAnswer"]')).findIndex(radio => radio.checked);
+
+        if (updatedQuestion && options.length > 0 && correctAnswerIndex !== -1) {
+            const filteredQuestions = getFilteredQuestions(0, 0); // Adjust level and tab index as needed
+            const questionToUpdate = filteredQuestions[currentEditingIndex];
+
+            // Update the question object
+            questionToUpdate.question = updatedQuestion;
+            questionToUpdate.options = options;
+            questionToUpdate.answer = options[correctAnswerIndex];
+
+            // Update the DOM directly
+            const questionContainer = document.querySelector(`#q-${currentEditingIndex}`);
+            questionContainer.querySelector('p').textContent = updatedQuestion;
+
+            // Update options in the DOM
+            console.log(`index = ${currentEditingIndex}`)
+            const optionsContainer = document.querySelector(`#question-${currentEditingIndex}`);
+            console.log(`${optionsContainer}`)
+            optionsContainer.innerHTML = ''; // Clear existing options
+
+            options.forEach((answer, idx) => {
+                let answerDiv = document.createElement('div');
+                answerDiv.classList.add('flex', 'items-center', 'space-x-2');
+                answerDiv.innerHTML = `
+                    <i class="fas ${answer === options[correctAnswerIndex] ? 'fa-check text-green-500' : 'fa-times text-red-500'}"></i>
+                    <span class="text-sm">${answer}</span>
+                `;
+                optionsContainer.appendChild(answerDiv);
+            });
+
+            // Close the modal
+            document.getElementById('editModal').classList.add('hidden');
+        } else {
+            alert('Please fill in all fields and select a correct answer.');
+        }
+    }
+});
+
 // Open delete confirmation modal
 function openDeleteModal(index) {
     document.getElementById('deleteModal').classList.remove('hidden');
@@ -176,6 +224,10 @@ function confirmDelete(index) {
 }
 
 // Save changes made in the edit modal
+/**
+ * 
+ * 
+ 
 document.getElementById('saveChanges').addEventListener('click', () => {
     const updatedQuestion = document.getElementById('question').value;
     const options = Array.from(document.querySelectorAll('.option')).map(optionInput => optionInput.value);
@@ -191,6 +243,8 @@ document.getElementById('saveChanges').addEventListener('click', () => {
         document.getElementById('editModal').classList.add('hidden');
     }
 });
+*/
+
 
 // Initialize the application
 init();
