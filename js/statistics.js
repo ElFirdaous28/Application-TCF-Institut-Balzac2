@@ -33,11 +33,11 @@ const users = [
                 noteNiveau: 10,
                 GrammerCat: {
                     valide: false,
-                    noteCat:0,
+                    noteCat:7,
                     responses: [
-                        { questionId: 1, chosenAnswer: "est", time: 0 },
-                        { questionId: 2, chosenAnswer: "suis", time: 0 },
-                        { questionId: 3, chosenAnswer: "ont", time: 0 },
+                        { questionId: 1, chosenAnswer: "suis", time: 10 },
+                        { questionId: 2, chosenAnswer: "", time: 20 },
+                        { questionId: 3, chosenAnswer: "ont", time: 5 },
                         { questionId: 4, chosenAnswer: "allez", time: 0 },
                         { questionId: 5, chosenAnswer: "mangent", time: 0 }
                     ]
@@ -227,7 +227,7 @@ function usersScores() {
     storedUsers.forEach(user => {
         const usersScoreElement=document.getElementById('users_score');
         const lastNoteData = getLastNote(user);
-        usersScoreElement.innerHTML+=`<div data-total-score="${userTotalScoreCalculator(user)}" class="border border-[#BFCFE7] rounded-lg p-4 flex items-center justify-between">
+        usersScoreElement.innerHTML+=`<div onclick="reportByUser(event)" data-user-id=${user.id} data-total-score="${userTotalScoreCalculator(user)}" class="border border-[#BFCFE7] rounded-lg p-4 flex items-center justify-between cursor-pointer">
                                             <div class="flex items-center">
                                                 <div class="bg-[#BFCFE7] rounded-full h-12 w-12 flex items-center justify-center text-[#525CEB] text-xl font-bold mr-4">${user.username.charAt(0).toUpperCase()}</div>
                                                 <div>
@@ -424,3 +424,15 @@ function usersSucceed(l){
     return usersSucceed;    
 }
 
+
+
+// report by user
+function reportByUser(event){
+    const clickedUser = event.target;
+    const currentUser = clickedUser.getAttribute('data-user-id');    
+    localStorage.setItem("currentUser",currentUser);
+
+    if (currentUser) {
+       window.location.href="user_score.html"
+    }
+}
