@@ -1,45 +1,198 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta
-      name="description"
-      content="Explore your French proficiency with our interactive platform! Based on the TCF framework, this tool offers scorezes, immediate feedback, and tracks your progress across levels from A1 to C2. Start your language journey with us today.">
-    <meta
-      name="keywords"
-      content="French proficiency test, TCF quiz, French language levels, Institut Balzac, language assessment, French quiz A1 to C2, French learning, test de connaissance du français, interactive French test, French skills evaluation">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Balzac TCF</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
 
-    <title>Document</title>
-    <script src="../tailwind.js"></script>
-  </head>
-<body class="p-8">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-2xl font-bold text-[#3D3B40] mb-8">Statistiques Générales et Tableau de Bord</h1>
-        <!-- taux par neveau -->
-        <div id="levels_boxes_container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-10 mb-24 text-[#3D3B40]">
-            <!-- level boxes will appear here -->
-        </div>
-        <div class="flex flex-col sm:flex-row items-center mb-10">
-            <input id="username_search"  onchange="searchUser()" type="text" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto focus:border-[#BFCFE7] focus:text-[#3D3B40] focus:outline-none"">
-            <select id="date_select"  onchange="sortByDate()" type="date" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-[#3D3B40] px-3">
-                <option value="">----------</option>
-                <option value="recente">Plus Recente</option>
-                <option value="ancienne">Plus Ancienne</option>
-            </select>
-            
-            <select id="level_select"  onchange="sortByLevel()"  class="border border-[#BFCFE7] rounded-lg p-2 w-full sm:w-auto text-[#3D3B40] focus:border-[#BFCFE7] focus:text-[#3D3B40] px-3">
-                <option value="">----------</option>
-                <option value="high">Niveau Eleve</option>
-                <option value="low">Niveau Bas</option>
-            </select>
-        </div>
-        <p class="text-[#3D3B40] mb-4">Cliquez sur un utilisateur pour voir son score.</p>
-        <div id="users_score" class="space-y-4">
-            <!-- users's last score will appear here -->
+    <body>
+
+        <div>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+        
+        <div x-data="{ sidebarOpen: false }" class="flex h-screen">
+            <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
+        
+            <div :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0">
+                <div class="flex items-center px-6 mt-8">
+                    <div class="flex items-end"> 
+                        <span class="text-4xl font-semibold text-[#525CEB]">TCF</span>
+                        <span class="mx-2 text-2xl font-semibold text-white">Balzac</span>
+                    </div>
+                </div>
+        
+                <nav class="mt-10">
+                    <a href="AdminQuestions.html" class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" id="questions-nav">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="mx-3">Questions</span>
+                    </a>
+
+                    <a href="statistiques_tableau_bord.html" class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                        </svg>
+        
+                        <span class="mx-3">Statistiques</span>
+                    </a>
+
+                    <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                        href="" id="usersDropDown">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M13 20V18C13 15.2386 10.7614 13 8 13C5.23858 13 3 15.2386 3 18V20H13ZM13 20H21V19C21 16.0545 18.7614 14 16 14C14.5867 14 13.3103 14.6255 12.4009 15.6311M11 7C11 8.65685 9.65685 10 8 10C6.34315 10 5 8.65685 5 7C5 5.34315 6.34315 4 8 4C9.65685 4 11 5.34315 11 7ZM18 9C18 10.1046 17.1046 11 16 11C14.8954 11 14 10.1046 14 9C14 7.89543 14.8954 7 16 7C17.1046 7 18 7.89543 18 9Z" />
+                        </svg>                                                
+                        <span class="mx-3">Utilisateurs</span>
+                    </a>
+                    <div id="usersList" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out text-gray-100">
+                    </div>
+
+                    <a href="login-admin.html" class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" id="questions-nav">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15 12L2 12M2 12L5.5 9M2 12L5.5 15" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M9.00195 7C9.01406 4.82497 9.11051 3.64706 9.87889 2.87868C10.7576 2 12.1718 2 15.0002 2L16.0002 2C18.8286 2 20.2429 2 21.1215 2.87868C22.0002 3.75736 22.0002 5.17157 22.0002 8L22.0002 16C22.0002 18.8284 22.0002 20.2426 21.1215 21.1213C20.3531 21.8897 19.1752 21.9862 17 21.9983M9.00195 17C9.01406 19.175 9.11051 20.3529 9.87889 21.1213C10.5202 21.7626 11.4467 21.9359 13 21.9827" />
+                        </svg>                                                                     
+                        <span class="mx-3">LogOut</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-[#525CEB]">
+                    <div class="flex items-center">
+                        <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+        
+                    </div>
+        
+                    <div class="flex items-center">
+                        <div x-data="{ notificationOpen: false }" class="relative">
+                            <button @click="notificationOpen = ! notificationOpen"
+                                class="flex mx-4 text-gray-600 focus:outline-none">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38757 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38757 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                            </button>
+        
+                            <div x-show="notificationOpen" @click="notificationOpen = false"
+                                class="fixed inset-0 z-10 w-full h-full" style="display: none;"></div>
+        
+                            <div x-show="notificationOpen"
+                                class="absolute right-0 z-10 mt-2 overflow-hidden bg-white rounded-lg shadow-xl w-80"
+                                style="width: 20rem; display: none;">
+                                <a href="#"
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-indigo-600">
+                                    <img class="object-cover w-8 h-8 mx-1 rounded-full"
+                                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=334&amp;q=80"
+                                        alt="avatar">
+                                    <p class="mx-2 text-sm">
+                                        <span class="font-bold" href="#">Sara Salah</span> replied on the <span
+                                            class="font-bold text-indigo-400" href="#">Upload Image</span> artical . 2m
+                                    </p>
+                                </a>
+                                <a href="#"
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-indigo-600">
+                                    <img class="object-cover w-8 h-8 mx-1 rounded-full"
+                                        src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=634&amp;q=80"
+                                        alt="avatar">
+                                    <p class="mx-2 text-sm">
+                                        <span class="font-bold" href="#">Slick Net</span> start following you . 45m
+                                    </p>
+                                </a>
+                                <a href="#"
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-indigo-600">
+                                    <img class="object-cover w-8 h-8 mx-1 rounded-full"
+                                        src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=334&amp;q=80"
+                                        alt="avatar">
+                                    <p class="mx-2 text-sm">
+                                        <span class="font-bold" href="#">Jane Doe</span> Like Your reply on <span
+                                            class="font-bold text-indigo-400" href="#">Test with TDD</span> artical . 1h
+                                    </p>
+                                </a>
+                                <a href="#"
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-indigo-600">
+                                    <img class="object-cover w-8 h-8 mx-1 rounded-full"
+                                        src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=398&amp;q=80"
+                                        alt="avatar">
+                                    <p class="mx-2 text-sm">
+                                        <span class="font-bold" href="#">Abigail Bennett</span> start following you . 3h
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+        
+                        <div x-data="{ dropdownOpen: false }" class="relative">
+                            <button @click="dropdownOpen = ! dropdownOpen"
+                                class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
+                                <img class="object-cover w-full h-full"
+                                    src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=296&amp;q=80"
+                                    alt="Your avatar">
+                            </button>
+        
+                            <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 z-10 w-full h-full"
+                                style="display: none;"></div>
+        
+                            <div x-show="dropdownOpen"
+                                class="absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl"
+                                style="display: none;">
+                                <a href="#"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Products</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <main class="flex-1 overflow-y-auto">
+                  <div class="max-w-4xl mx-auto">
+                    <h1 class="text-2xl font-bold text-[#3D3B40] my-8">Statistiques Générales et Tableau de Bord</h1>
+                    <!-- taux par neveau -->
+                    <div id="levels_boxes_container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-10 mb-24 text-[#3D3B40]">
+                        <!-- level boxes will appear here -->
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center mb-10">
+                        <input id="username_search"  onchange="searchUser()" type="text" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto focus:border-[#BFCFE7] focus:text-[#3D3B40] focus:outline-none"">
+                        <select id="date_select"  onchange="sortByDate()" type="date" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-[#3D3B40] px-3">
+                            <option value="">----------</option>
+                            <option value="recente">Plus Recente</option>
+                            <option value="ancienne">Plus Ancienne</option>
+                        </select>
+                        
+                        <select id="level_select"  onchange="sortByLevel()"  class="border border-[#BFCFE7] rounded-lg p-2 w-full sm:w-auto text-[#3D3B40] focus:border-[#BFCFE7] focus:text-[#3D3B40] px-3">
+                            <option value="">----------</option>
+                            <option value="high">Niveau Eleve</option>
+                            <option value="low">Niveau Bas</option>
+                        </select>
+                    </div>
+                    <p class="text-[#3D3B40] mb-4">Cliquez sur un utilisateur pour voir son score.</p>
+                    <div id="users_score" class="space-y-4 mb-20 ">
+                        <!-- users's last score will appear here -->
+                    </div>
+                </div>
+                </main>
+            </div>
         </div>
     </div>
-
+    </body>
+    <script src="../js/sidebar.js"></script>
     <script src="../js/statistics.js"></script>
-</body>
 </html>
