@@ -1,5 +1,4 @@
 const listUsers = JSON.parse(localStorage.getItem('users'));
-console.log(listUsers);
 const usersList = document.getElementById('usersList');
 
 listUsers.forEach(user => {   
@@ -11,7 +10,6 @@ usersDropDown.addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default link behavior
     if (usersList.classList.contains('max-h-0')) {
         usersList.classList.remove('max-h-0');
-        usersList.classList.add('max-h-screen'); // Set a maximum height for the animation
     } else {
         usersList.classList.add('max-h-0');
         usersList.classList.remove('max-h-screen');

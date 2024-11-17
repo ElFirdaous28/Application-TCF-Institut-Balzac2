@@ -1,25 +1,4 @@
 let  questions = []
-async function loadData() {
-    const response = await fetch('../questions.json');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data; 
-}
-
-async function init() {
-    try {
-        questions = await loadData();
-        localStorage.setItem('questions', JSON.stringify(questions));
-        // questions = getRandomQuestions(questions, numberOfQuestions);
-    } catch (error) {
-        console.error('Error loading data:', error);
-    }
-}
-
-init();
-
 
 const users = [
     {
