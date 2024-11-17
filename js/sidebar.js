@@ -17,3 +17,14 @@ usersDropDown.addEventListener('click', (event) => {
         usersList.classList.remove('max-h-screen');
     }
 });
+
+// report by user
+function reportByUser(event){
+    const clickedUser = event.target;
+    const currentUser = clickedUser.getAttribute('data-user-id');    
+    localStorage.setItem("currentUser",currentUser);
+
+    if (currentUser) {
+       window.location.href="user_score.html"
+    }
+}

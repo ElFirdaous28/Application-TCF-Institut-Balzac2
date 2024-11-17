@@ -3,8 +3,25 @@ const contentContainer = document.querySelector(
   "#questions-section .content-container"
 );
 
-let questions = [];
-let filtered_questions = [];
+let  questions = []
+async function loadData() {
+    const response = await fetch('../questions.json');
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data; 
+}
+
+async function init() {
+    try {
+        questions = await loadData();
+        localStorage.setItem('questions', JSON.stringify(questions));
+        // questions = getRandomQuestions(questions, numberOfQuestions);
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}let filtered_questions = [];
 
 // Add this at the top of the file after the initial variable declarations
 const TOAST_TYPES = {
