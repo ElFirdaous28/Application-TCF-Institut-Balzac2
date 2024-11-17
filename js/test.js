@@ -6,6 +6,14 @@ const contentContainer = document.querySelector(
 let questions = [];
 let filtered_questions = [];
 
+// Add this at the top of the file after the initial variable declarations
+const TOAST_TYPES = {
+  CREATE: "create",
+  UPDATE: "update",
+  DELETE: "delete",
+  ERROR: "error",
+};
+
 // Initialize questions from localStorage on page load
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize localStorage with empty structure if it doesn't exist
@@ -18,308 +26,194 @@ document.addEventListener("DOMContentLoaded", () => {
           Vocabulaire: [],
         },
       },
+      {
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      },
+      {
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      },
+      {
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      },
+      {
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      },
+      {
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      },
     ];
     localStorage.setItem("questions", JSON.stringify(initialStructure));
   }
+
+  // Set initial active states
+  const firstLevelBtn = document.querySelector(".level-btn");
+  const firstTab = document.querySelector("#questions-section .tab");
+  if (firstLevelBtn)
+    firstLevelBtn.classList.add(
+      "active",
+      "bg-indigo-50",
+      "ring-2",
+      "ring-indigo-500"
+    );
+  if (firstTab)
+    firstTab.classList.add("active", "border-blue-500", "text-blue-500");
 
   // Load questions from localStorage and render initial view
   renderQuestion(0, 0, "Grammaire");
 
   // Initialize all modal handlers
   initializeModalHandlers();
+
+  initializeDeleteHandler();
 });
 
 function initializeModalHandlers() {
-  // Debug helper
-  function checkElement(id, context) {
-    const element = document.getElementById(id);
-    if (!element) {
-      console.error(`Missing element: #${id} (${context})`);
-      return null;
-    }
-    return element;
-  }
+  // Initialize containers
+  const createModal = document.getElementById("createModal");
+  const editModal = document.getElementById("editModal");
+  const newOptionsContainer = document.getElementById("newOptionsContainer");
+  const editOptionsContainer = document.getElementById("optionsContainer");
 
-  // Validate question data
-  function validateQuestionData(question, options, answer) {
-    if (!question.trim()) {
-      showError("Question text is required");
-      return false;
-    }
-    if (options.length < 2 || options.length > 4) {
-      showError("Questions must have between 2 and 4 options");
-      return false;
-    }
-    if (options.some((opt) => !opt.trim())) {
-      showError("All options must be filled");
-      return false;
-    }
-    if (!answer) {
-      showError("Please select a correct answer");
-      return false;
-    }
-    return true;
-  }
-
-  // Add new option to container
-  function addOptionToContainer(container, isNewQuestion = false) {
-    const optionsCount = container.querySelectorAll(".option-input").length;
-    if (optionsCount >= 4) return;
-
-    const radioName = isNewQuestion ? "newCorrectAnswer" : "correctAnswer";
-    const newOption = document.createElement("div");
-    newOption.className = "option-input flex items-center gap-2 mb-2";
-    newOption.innerHTML = `
-      <input type="text" class="option flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" 
-        placeholder="Enter option" />
-      <input type="radio" name="${radioName}" value="${optionsCount}" />
-      ${
-        optionsCount > 1
-          ? `
-        <button class="remove-option text-gray-400 hover:text-red-500">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      `
-          : ""
-      }
-    `;
-
-    container.appendChild(newOption);
-    updateAddOptionButtonVisibility(container);
-  }
-
-  // Update add option button visibility
-  function updateAddOptionButtonVisibility(container) {
-    const modal = container.closest(".modal");
-    const addButton = modal.querySelector('[id^="addOption"]');
-    if (addButton) {
-      addButton.classList.toggle(
-        "hidden",
-        container.querySelectorAll(".option-input").length >= 4
-      );
-    }
-  }
-
-  // Initialize create modal
-  const createModal = checkElement("createModal", "Create modal");
-  const newOptionsContainer = checkElement(
-    "newOptionsContainer",
-    "New options container"
-  );
-  const addOptionButton = checkElement("addOptionButton", "Add option button");
-  const saveNewQuestion = checkElement(
-    "saveNewQuestion",
-    "Save new question button"
-  );
-
-  if (
-    createModal &&
-    newOptionsContainer &&
-    addOptionButton &&
-    saveNewQuestion
-  ) {
-    // Add initial options when opening create modal
-    document.getElementById("addQuestionBtn")?.addEventListener("click", () => {
-      newOptionsContainer.innerHTML = "";
-      addOptionToContainer(newOptionsContainer, true);
-      addOptionToContainer(newOptionsContainer, true);
-      createModal.classList.remove("hidden");
-    });
-    // Add option button handler
-    addOptionButton.addEventListener("click", () => {
-      addOptionToContainer(newOptionsContainer, true);
-    });
-
-    // Save new question handler
-    saveNewQuestion.addEventListener("click", () => {
-      const questionText = document.getElementById("newQuestion").value;
-      const options = [...newOptionsContainer.querySelectorAll(".option")].map(
-        (input) => input.value.trim()
-      );
-      const selectedRadio = newOptionsContainer.querySelector(
-        'input[name="newCorrectAnswer"]:checked'
-      );
-      const answer = selectedRadio ? options[selectedRadio.value] : null;
-
-      if (validateQuestionData(questionText, options, answer)) {
-        const level = getCurrentLevel();
-        const category = getCurrentCategory();
-        const questions = getQuestionsFromLocalStorage();
-
-        questions[level].categories[category].push({
-          question: questionText,
-          options: options,
-          answer: answer,
-        });
-
-        saveQuestionsToLocalStorage(questions);
-        renderQuestion(level, getCurrentTabIndex(), category);
-        createModal.classList.add("hidden");
-        document.getElementById("newQuestion").value = "";
-      }
-    });
-  }
-
-  // Initialize edit modal
-  const editModal = checkElement("editModal", "Edit modal");
-  const optionsContainer = checkElement(
-    "optionsContainer",
-    "Options container"
-  );
-  const addEditOption = checkElement("addEditOption", "Add edit option button");
-  const saveChanges = checkElement("saveChanges", "Save changes button");
-
-  if (editModal && optionsContainer && addEditOption && saveChanges) {
-    // Add option button handler
-    addEditOption.addEventListener("click", () => {
-      addOptionToContainer(optionsContainer);
-    });
-
-    // Save changes handler
-    saveChanges.addEventListener("click", () => {
-      const editModal = document.getElementById("editModal");
-      const index = parseInt(editModal.dataset.index);
-      const level = parseInt(editModal.dataset.level);
-      const category = editModal.dataset.category;
-
-      const questionText = document.getElementById("question").value.trim();
-      const optionsContainer = document.getElementById("optionsContainer");
-      const options = [...optionsContainer.querySelectorAll(".option")].map(
-        (input) => input.value.trim()
-      );
-      const selectedRadio = optionsContainer.querySelector(
-        'input[name="correctAnswer"]:checked'
-      );
-
-      if (
-        validateQuestionData(
-          questionText,
-          options,
-          selectedRadio ? options[selectedRadio.value] : null
-        )
-      ) {
-        const answer = options[selectedRadio.value];
-
-        // Update storage
-        const questions = getQuestionsFromLocalStorage();
-        questions[level].categories[category][index] = {
-          question: questionText,
-          options: options,
-          answer: answer,
-        };
-        saveQuestionsToLocalStorage(questions);
-
-        // Update DOM
-        renderQuestion(level, getCurrentTabIndex(), category);
-
-        // Close modal
-        editModal.classList.add("hidden");
-      }
-    });
-  }
-
-  // Remove option handler (for both modals)
-  document.addEventListener("click", (e) => {
-    const removeBtn = e.target.closest(".remove-option");
-    if (removeBtn) {
-      const container = removeBtn.closest(".options-container");
-      if (container.querySelectorAll(".option-input").length > 2) {
-        removeBtn.closest(".option-input").remove();
-        updateAddOptionButtonVisibility(container);
-
-        // Update radio button values
-        container
-          .querySelectorAll('input[type="radio"]')
-          .forEach((radio, index) => {
-            radio.value = index;
-          });
-      }
-    }
-  });
-
-  // Close buttons for all modals
-  document.querySelectorAll(".modal .close-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const modal = btn.closest(".modal");
-      modal.classList.add("hidden");
-      if (modal.id === "createModal") {
-        document.getElementById("newQuestion").value = "";
-        newOptionsContainer.innerHTML = "";
-      }
-    });
-  });
-
-  // Edit modal handler
-  window.handleEdit = function (index) {
-    const editModal = document.getElementById("editModal");
-    const level = getCurrentLevel();
-    const category = getCurrentCategory();
-
-    // Get current question data
-    const questions = getQuestionsFromLocalStorage();
-    const questionData = questions[level].categories[category][index];
-
-    if (!questionData) {
-      console.error("Question not found");
-      return;
-    }
-
-    // Store metadata for save operation
-    editModal.dataset.index = index;
-    editModal.dataset.level = level;
-    editModal.dataset.category = category;
-
-    // Populate question text
-    const questionTextarea = document.getElementById("question");
-    questionTextarea.value = questionData.question;
-
-    // Clear and populate options container
-    const optionsContainer = document.getElementById("optionsContainer");
-    optionsContainer.innerHTML = "";
-
-    questionData.options.forEach((option, idx) => {
-      const optionDiv = document.createElement("div");
-      optionDiv.className = "option-input flex items-center gap-2 mb-2";
-      optionDiv.innerHTML = `
+  // Helper function to create option HTML
+  function createOptionHTML(option = "", index = 0, isCorrect = false) {
+    return `
+      <div class="option-input flex items-center gap-3 mb-3 p-4 rounded-lg ${
+        isCorrect ? "is-correct" : ""
+      }">
         <input type="text" value="${option}"
-          class="option flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          class="option flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-gray-700"
           placeholder="Enter option" />
-        <input type="radio" name="correctAnswer" value="${idx}" ${
-        option === questionData.answer ? "checked" : ""
-      } />
+        <div class="custom-radio">
+          <input type="radio" name="correctAnswer" value="${index}" ${
+      isCorrect ? "checked" : ""
+    } />
+          <span class="radio-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
         ${
-          questionData.options.length > 2
+          index > 1
             ? `
-          <button class="remove-option text-gray-400 hover:text-red-500">
-            <i class="fas fa-trash-alt"></i>
+          <button class="remove-option text-gray-400 hover:text-red-500 transition-colors">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
           </button>
         `
             : ""
         }
-      `;
-      optionsContainer.appendChild(optionDiv);
+      </div>
+    `;
+  }
+
+  // Helper function to add radio change handlers
+  function addRadioHandlers(container) {
+    container.querySelectorAll('input[type="radio"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        container.querySelectorAll(".option-input").forEach((div) => {
+          div.classList.remove("is-correct");
+        });
+        e.target.closest(".option-input").classList.add("is-correct");
+      });
     });
+  }
 
-    // Update add option button visibility
-    const addEditOption = document.getElementById("addEditOption");
-    addEditOption.classList.toggle("hidden", questionData.options.length >= 4);
+  // Initialize create modal options
+  if (newOptionsContainer) {
+    // Add initial options
+    newOptionsContainer.innerHTML =
+      createOptionHTML("", 0) + createOptionHTML("", 1);
+    addRadioHandlers(newOptionsContainer);
 
-    // Show modal
-    editModal.classList.remove("hidden");
-  };
+    // Add option button handler
+    const addOptionButton = document.getElementById("addOptionButton");
+    if (addOptionButton) {
+      addOptionButton.addEventListener("click", () => {
+        const optionsCount =
+          newOptionsContainer.querySelectorAll(".option-input").length;
+        if (optionsCount >= 4) return;
 
-  // Preview modal handler
-  window.handlePreview = function (index) {
-    const previewModal = document.getElementById("previewModal");
+        const newOptionHTML = createOptionHTML("", optionsCount);
+        newOptionsContainer.insertAdjacentHTML("beforeend", newOptionHTML);
+        addRadioHandlers(newOptionsContainer);
+
+        // Update button visibility
+        addOptionButton.classList.toggle("hidden", optionsCount + 1 >= 4);
+      });
+    }
+  }
+
+  /** */
+
+  // Edit modal population
+  window.handleEdit = function (index) {
     const level = getCurrentLevel();
     const category = getCurrentCategory();
     const questions = getQuestionsFromLocalStorage();
     const question = questions[level].categories[category][index];
 
-    // ... rest of preview modal code ...
+    if (!question) return;
+
+    // Store metadata
+    editModal.dataset.index = index;
+    editModal.dataset.level = level;
+    editModal.dataset.category = category;
+
+    // Populate question
+    document.getElementById("question").value = question.question;
+
+    // Populate options
+    if (editOptionsContainer) {
+      editOptionsContainer.innerHTML = question.options
+        .map((option, i) =>
+          createOptionHTML(option, i, option === question.answer)
+        )
+        .join("");
+      addRadioHandlers(editOptionsContainer);
+
+      // Update add option button visibility
+      const addEditOption = document.getElementById("addEditOption");
+      if (addEditOption) {
+        addEditOption.classList.toggle("hidden", question.options.length >= 4);
+
+        addEditOption.onclick = () => {
+          const optionsCount =
+            editOptionsContainer.querySelectorAll(".option-input").length;
+          if (optionsCount >= 4) return;
+
+          const newOptionHTML = createOptionHTML("", optionsCount);
+          editOptionsContainer.insertAdjacentHTML("beforeend", newOptionHTML);
+          addRadioHandlers(editOptionsContainer);
+          addEditOption.classList.toggle("hidden", optionsCount + 1 >= 4);
+        };
+      }
+    }
+
+    editModal.classList.remove("hidden");
   };
 
-  // Delete modal handler
   window.handleDelete = function (index) {
     const deleteModal = document.getElementById("deleteModal");
     const confirmDelete = document.getElementById("confirmDelete");
@@ -341,13 +235,116 @@ function initializeModalHandlers() {
       const category = confirmDelete.dataset.category;
 
       const questions = getQuestionsFromLocalStorage();
+      const questionText =
+        questions[level].categories[category][index].question;
+
       questions[level].categories[category].splice(index, 1);
       saveQuestionsToLocalStorage(questions);
+
+      // Show delete success toast
+      showToast(
+        `Question "${questionText}" successfully deleted`,
+        TOAST_TYPES.DELETE
+      );
 
       renderQuestion(level, getCurrentTabIndex(), category);
       document.getElementById("deleteModal").classList.add("hidden");
     });
   }
+
+  // Add edit modal button handlers
+  if (editModal) {
+    // Close and Cancel buttons
+    editModal.querySelectorAll(".close-btn, .cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        editModal.classList.add("hidden");
+      });
+    });
+
+    // Save Changes button
+    const saveChangesBtn = editModal.querySelector("#saveChanges");
+    if (saveChangesBtn) {
+      saveChangesBtn.addEventListener("click", () => {
+        const questionData = validateEditInputs();
+        if (!questionData) return;
+
+        const questions = getQuestionsFromLocalStorage();
+        const level = parseInt(editModal.dataset.level);
+        const category = editModal.dataset.category;
+        const index = parseInt(editModal.dataset.index);
+
+        // Update question in storage
+        questions[level].categories[category][index] = questionData;
+        saveQuestionsToLocalStorage(questions);
+
+        // Show update toast (blue)
+        showToast(
+          `Question "${questionData.question}" successfully updated`,
+          TOAST_TYPES.UPDATE
+        );
+
+        // Re-render and close modal
+        renderQuestion(level, getCurrentTabIndex(), category);
+        editModal.classList.add("hidden");
+      });
+    }
+
+    // Remove option buttons
+    editModal.addEventListener("click", (e) => {
+      if (e.target.closest(".remove-option")) {
+        const optionsContainer = editModal.querySelector("#optionsContainer");
+        if (optionsContainer.children.length > 2) {
+          e.target.closest(".option-input").remove();
+          // Show add option button if below 4 options
+          const addEditOption = document.getElementById("addEditOption");
+          addEditOption.classList.toggle(
+            "hidden",
+            optionsContainer.children.length >= 4
+          );
+        }
+      }
+    });
+  }
+}
+
+function validateEditInputs() {
+  const editModal = document.getElementById("editModal");
+  const questionInput = editModal.querySelector("#question");
+  const optionsContainer = editModal.querySelector("#optionsContainer");
+
+  const question = questionInput.value.trim();
+  const options = Array.from(optionsContainer.querySelectorAll(".option")).map(
+    (input) => input.value.trim()
+  );
+  const selectedAnswer = optionsContainer.querySelector(
+    'input[type="radio"]:checked'
+  );
+
+  if (!question) {
+    showToast("Please enter a question", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (options.length < 2) {
+    showToast("Please provide at least 2 options", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (options.some((opt) => !opt)) {
+    showToast("Please fill in all options", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (!selectedAnswer) {
+    showToast("Please select the correct answer", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  return {
+    question,
+    options,
+    answer: options[selectedAnswer.value],
+  };
 }
 
 // Helper function to show errors
@@ -365,22 +362,28 @@ function showError(message) {
 // Helper functions to get current state
 function getCurrentLevel() {
   const activeLevel = document.querySelector(".level-btn.active");
+  if (!activeLevel) return 0; // Default to first level if none active
+
   const levelButtons = document.querySelectorAll(".level-btn");
-  return Array.from(levelButtons).indexOf(activeLevel);
+  const index = Array.from(levelButtons).indexOf(activeLevel);
+  return index !== -1 ? index : 0;
 }
 
 function getCurrentCategory() {
-  return (
-    document
-      .querySelector("#questions-section .tab.active")
-      ?.textContent.trim() || "Grammaire"
-  );
+  const activeTab = document.querySelector("#questions-section .tab.active");
+  if (!activeTab) return "Grammaire"; // Default to Grammaire if no tab active
+
+  const category = activeTab.textContent.trim();
+  return category || "Grammaire";
 }
 
 function getCurrentTabIndex() {
-  return Array.from(
-    document.querySelectorAll("#questions-section .tab")
-  ).findIndex((tab) => tab.classList.contains("active"));
+  const tabs = document.querySelectorAll("#questions-section .tab");
+  const activeTab = document.querySelector("#questions-section .tab.active");
+  if (!activeTab) return 0;
+
+  const index = Array.from(tabs).indexOf(activeTab);
+  return index !== -1 ? index : 0;
 }
 
 // Update the tab click handlers
@@ -395,7 +398,7 @@ tabs.forEach((tab, index) => {
     // Determine category and render with current level
     const category =
       index === 0 ? "Grammaire" : index === 1 ? "Compréhension" : "Vocabulaire";
-    const currentLevel = getCurrentLevel(); // Get the current selected level
+    const currentLevel = getCurrentLevel();
     renderQuestion(currentLevel, index, category);
   });
 });
@@ -412,9 +415,7 @@ levelButtons.forEach((btn, index) => {
     btn.classList.add("active", "bg-indigo-50", "ring-2", "ring-indigo-500");
 
     // Get current category from active tab
-    const currentTab = Array.from(tabs).findIndex((tab) =>
-      tab.classList.contains("active")
-    );
+    const currentTab = getCurrentTabIndex();
     const category = getCurrentCategory();
 
     // Update current level and re-render
@@ -426,35 +427,61 @@ function renderQuestion(level, tab_index, category) {
   const questions = getQuestionsFromLocalStorage();
   const categoryQuestions = questions[level].categories[category];
 
-  // Clear existing content
+  // Add header with question count and add button
   contentContainer.innerHTML = `
     <div class="flex justify-between items-center mb-6">
       <div>
         <h2 class="text-xl font-semibold text-gray-800">${category}</h2>
-        <p class="text-sm text-gray-500">Level ${level + 1} • ${
-    categoryQuestions.length
-  } questions</p>
+        <p class="text-sm text-gray-500">Level ${
+          ["A1", "A2", "B1", "B2", "C1", "C2"][level]
+        } • ${categoryQuestions.length} questions</p>
       </div>
-      <button id="addQuestionBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+      <button onclick="handleQuestionCreation()" id="addQuestionBtn" class="bg-[#525CEB] hover:bg-[#6A64DA] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
         <i class="fas fa-plus"></i>
         Add Question
       </button>
     </div>
   `;
 
-  // Render each question
+  // Render each question with action buttons
   categoryQuestions.forEach((question, index) => {
     const questionHTML = `
-      <div id="q-${index}" class="bg-white rounded-lg shadow-sm p-6 mb-4 hover:shadow-md transition-all duration-200">
+      <div class="bg-white rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition-all duration-200">
         <div class="flex justify-between items-start">
           <div class="flex-1">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">${
-              question.question
-            }</h3>
-            <div class="space-y-2">
+            <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-2">
+              <div class="bg-purple-100 p-2 rounded-lg">
+                <i class="fas fa-question text-[#525CEB]"></i>
+              </div>
+              <h3 class="text-lg font-medium text-gray-900">${
+                question.question
+              }</h3>
+              </div>
+                        <div class="flex items-start space-x-2">
+            <button onclick="handlePreview(${index})" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-all duration-200" title="Preview">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+            </button>
+            <button onclick="handleEdit(${index})" class="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-all duration-200" title="Edit">
+                          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button onclick="handleDelete(${index})" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200" title="Delete">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>            
+          </button>
+          </div>
+            </div>
+            
+            <div class="pl-11 space-y-2">
               ${question.options
                 .map(
-                  (option) => `
+                  (option, optIndex) => `
                 <div class="flex items-center gap-2 p-2 ${
                   option === question.answer ? "bg-green-50" : "bg-gray-50"
                 } rounded-lg">
@@ -468,37 +495,23 @@ function renderQuestion(level, tab_index, category) {
                       ? "text-green-700 font-medium"
                       : "text-gray-600"
                   }">${option}</span>
+                  ${
+                    option === question.answer
+                      ? '<span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full ml-auto">Correct Answer</span>'
+                      : ""
+                  }
                 </div>
               `
                 )
                 .join("")}
             </div>
           </div>
-          
-          <div class="flex items-start space-x-2">
-            <button onclick="handlePreview(${index}, ${level}, '${category}')" 
-              class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-all duration-200">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button onclick="handleEdit(${index}, ${level}, '${category}')" 
-              class="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-all duration-200">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button onclick="handleDelete(${index}, ${level}, '${category}')" 
-              class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+
+
         </div>
       </div>
     `;
     contentContainer.innerHTML += questionHTML;
-  });
-
-  // Add event listener for the Add Question button
-  document.getElementById("addQuestionBtn").addEventListener("click", () => {
-    const createModal = document.getElementById("createModal");
-    createModal.classList.remove("hidden");
   });
 }
 
@@ -536,6 +549,12 @@ function saveQuestion() {
   // Close modal and clear form
   document.getElementById("createModal").classList.add("hidden");
   clearForm();
+
+  // Show create toast (green)
+  showToast(
+    `Question "${newQuestion.question}" successfully created`,
+    TOAST_TYPES.CREATE
+  );
 }
 
 // Helper functions
@@ -543,15 +562,15 @@ function getQuestionsFromLocalStorage() {
   const questions = localStorage.getItem("questions");
   if (!questions) {
     // Return default structure if localStorage is empty
-    return [
-      {
+    return Array(6)
+      .fill()
+      .map(() => ({
         categories: {
           Grammaire: [],
           Compréhension: [],
           Vocabulaire: [],
         },
-      },
-    ];
+      }));
   }
   return JSON.parse(questions);
 }
@@ -574,6 +593,7 @@ function getCurrentCategory() {
 function handleEventListeners(level, category) {
   // Add Question button
   document.querySelector(".bg-purple-500").addEventListener("click", () => {
+    handleQuestionCreation();
     document.getElementById("createModal").classList.remove("hidden");
   });
 
@@ -587,14 +607,14 @@ function handleEventListeners(level, category) {
   // Edit buttons
   document.querySelectorAll(".edit-btn").forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      editQuestion(index, level, category);
+      window.handleEdit(index, getCurrentLevel(), getCurrentCategory());
     });
   });
 
   // Delete buttons
   document.querySelectorAll(".delete-btn").forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      deleteQuestion(index, level, category);
+      handleDelete(index, getCurrentLevel(), getCurrentCategory());
     });
   });
 }
@@ -619,28 +639,26 @@ function handlePreview(index, level, category) {
       </div>
 
       <div class="space-y-3">
-        ${question.options
-          .map(
-            (option, i) => `
-          <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-            <input type="radio" name="preview-answer" class="w-4 h-4 text-purple-600" ${
-              option === question.answer ? "checked" : ""
-            }>
-            <span class="text-gray-700">${option}</span>
-            ${
-              option === question.answer
-                ? `
-              <span class="ml-auto flex items-center gap-1 text-green-600 text-sm">
-                <i class="fas fa-check-circle"></i>
-                Correct Answer
-              </span>
-            `
-                : ""
-            }
-          </label>
-        `
-          )
-          .join("")}
+              ${question.options
+                .map(
+                  (option) => `
+                <div class="flex items-center gap-2 p-2 ${
+                  option === question.answer ? "bg-green-50" : "bg-gray-50"
+                } rounded-lg">
+                  <i class="fas ${
+                    option === question.answer
+                      ? "fa-check-circle text-green-500"
+                      : "fa-circle text-gray-400"
+                  } w-5"></i>
+                  <span class="${
+                    option === question.answer
+                      ? "text-green-700 font-medium"
+                      : "text-gray-600"
+                  }">${option}</span>
+                </div>
+              `
+                )
+                .join("")}
       </div>
 
       <div class="mt-6 pt-4 border-t">
@@ -664,10 +682,8 @@ function handlePreview(index, level, category) {
 
 function handleEdit(index) {
   const editModal = document.getElementById("editModal");
-  const level = getCurrentLevel(); // Get the current level
-  const category = getCurrentCategory(); // Get the current category
-
-  // Get current question data
+  const level = getCurrentLevel();
+  const category = getCurrentCategory();
   const questions = getQuestionsFromLocalStorage();
   const questionData = questions[level].categories[category][index];
 
@@ -677,17 +693,17 @@ function handleEdit(index) {
   }
 
   // Store metadata for save operation
-  editModal.dataset.index = index; // Store the index for later use
-  editModal.dataset.level = level; // Store the level
-  editModal.dataset.category = category; // Store the category
+  editModal.dataset.index = index;
+  editModal.dataset.level = level;
+  editModal.dataset.category = category;
 
   // Populate question text
   const questionTextarea = document.getElementById("question");
-  questionTextarea.value = questionData.question; // Set the question text
+  questionTextarea.value = questionData.question;
 
   // Clear and populate options container
-  const optionsContainer = document.getElementById("optionsContainer");
-  optionsContainer.innerHTML = ""; // Clear existing options
+  optionsContainer = document.getElementById("optionsContainer");
+  optionsContainer.innerHTML = "";
 
   questionData.options.forEach((option, idx) => {
     const optionDiv = document.createElement("div");
@@ -696,29 +712,61 @@ function handleEdit(index) {
       <input type="text" value="${option}"
         class="option flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
         placeholder="Enter option" />
-      <input type="radio" name="correctAnswer" value="${idx}" ${
+      <input type="radio" name="editCorrectAnswer" value="${idx}" ${
       option === questionData.answer ? "checked" : ""
     } />
-      <button class="remove-option text-red-500 hover:text-red-700">
-        <i class="fas fa-times"></i>
+      <button class="remove-option text-gray-400 hover:text-red-500 ${
+        questionData.options.length <= 2 ? "hidden" : ""
+      }">
+        <i class="fas fa-trash-alt"></i>
       </button>
     `;
     optionsContainer.appendChild(optionDiv);
   });
 
+  // Regroup radio buttons after populating options
+  regroupRadioButtons(optionsContainer, "editCorrectAnswer");
+
+  // Update add option button visibility
+  const addEditOption = document.getElementById("addEditOption");
+  addEditOption.classList.toggle("hidden", questionData.options.length >= 4);
+
   // Show modal
   editModal.classList.remove("hidden");
+
+  // Add radio change handlers
+  const optionsContainer = document.getElementById("optionsContainer");
+  if (optionsContainer) {
+    optionsContainer
+      .querySelectorAll('input[type="radio"]')
+      .forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+          optionsContainer.querySelectorAll(".option-input").forEach((div) => {
+            div.classList.remove("is-correct");
+          });
+          e.target.closest(".option-input").classList.add("is-correct");
+        });
+      });
+  }
 }
 
-function handleDelete(index, level, category) {
+function handleDelete(index) {
   const deleteModal = document.getElementById("deleteModal");
   const confirmDelete = document.getElementById("confirmDelete");
 
-  // Store data for delete operation
-  confirmDelete.dataset.index = index;
-  confirmDelete.dataset.level = level;
-  confirmDelete.dataset.category = category;
+  // Get current state
+  const level = getCurrentLevel();
+  const category = getCurrentCategory();
 
+  // Debug log to verify values before setting
+  console.log("Setting delete data:", { index, level, category });
+
+  // Store data for delete operation
+  confirmDelete.setAttribute("data-index", index);
+  confirmDelete.setAttribute("data-level", level);
+  confirmDelete.setAttribute("data-category", category);
+
+  // Show the modal
   deleteModal.classList.remove("hidden");
 }
 
@@ -726,13 +774,46 @@ function generateQuestionHTML(question, index) {
   return `
     <div class="flex justify-between items-start">
       <div class="flex-1">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-2">
           <div class="bg-purple-100 p-2 rounded-lg">
-            <i class="fas fa-question text-purple-500"></i>
+            <svg class="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
           <h3 class="text-lg font-medium text-gray-900">${
             question.question
           }</h3>
+          </div>
+                <div class="flex items-start space-x-2">
+        <button onclick="handlePreview(${index})" 
+          class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-all duration-200" 
+          title="Preview">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+        <button onclick="handleEdit(${index})" 
+          class="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-all duration-200" 
+          title="Edit">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+        <button onclick="handleDelete(${index})" 
+          class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200" 
+          title="Delete">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
         </div>
         
         <div class="pl-11 space-y-2">
@@ -752,6 +833,11 @@ function generateQuestionHTML(question, index) {
                   ? "text-green-700 font-medium"
                   : "text-gray-600"
               }">${option}</span>
+                ${
+                  option === question.answer
+                    ? '<span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full ml-auto">Correct Answer</span>'
+                    : ""
+                }
             </div>
           `
             )
@@ -759,17 +845,7 @@ function generateQuestionHTML(question, index) {
         </div>
       </div>
 
-      <div class="flex items-start space-x-2">
-        <button onclick="handlePreview(${index})" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-all duration-200" title="Preview">
-          <i class="fas fa-eye"></i>
-        </button>
-        <button onclick="handleEdit(${index})" class="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-all duration-200" title="Edit">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button onclick="handleDelete(${index})" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200" title="Delete">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      </div>
+
     </div>
   `;
 }
@@ -790,155 +866,202 @@ function handleQuestionCreation() {
   const saveBtn = document.getElementById("saveNewQuestion");
   const errorContainer = document.getElementById("errorContainer");
 
-  // Initialize with 2 default option inputs
+  // Show the modal
+  createModal.classList.remove("hidden");
+
   function addOptionInput() {
     const optionCount =
       optionsContainer.querySelectorAll(".option-input").length;
-    const optionInput = document.createElement("div");
-    optionInput.classList.add("option-input", "flex", "items-center", "gap-2");
-    optionInput.innerHTML = `
-            <div class="flex-1 flex items-center gap-2 p-2 border rounded-md bg-gray-50">
-                <input type="text" 
-                    class="new-option flex-1 bg-transparent focus:outline-none" 
-                    placeholder="Enter option ${optionCount + 1}" />
-                <div class="flex items-center gap-2">
-                    <label class="flex items-center gap-1 text-sm text-gray-600">
-                        <input type="radio" 
-                            name="newCorrectAnswer" 
-                            value="${optionCount}"
-                            class="text-purple-500 focus:ring-purple-500" />
-                        Correct
-                    </label>
-                    ${
-                      optionCount > 1
-                        ? `
-                        <button class="remove-option text-gray-400 hover:text-red-500">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    `
-                        : ""
-                    }
-                </div>
-            </div>
-        `;
-    optionsContainer.appendChild(optionInput);
+    if (optionCount >= 4) return; // Maximum 4 options
 
-    // Add remove button handler
-    const removeBtn = optionInput.querySelector(".remove-option");
-    if (removeBtn) {
-      removeBtn.addEventListener("click", () => {
-        if (optionsContainer.querySelectorAll(".option-input").length > 2) {
-          optionInput.remove();
-          updateOptionLabels();
+    const optionHTML = `
+      <div class="option-input flex items-center gap-3 mb-3 p-4 rounded-lg">
+        <input type="text" class="option flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-gray-700"
+          placeholder="Enter option" />
+        <div class="custom-radio">
+          <input type="radio" name="newCorrectAnswer" value="${optionCount}" />
+          <span class="radio-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+        ${
+          optionCount > 1
+            ? `
+          <button class="remove-option text-gray-400 hover:text-red-500 transition-colors">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        `
+            : ""
         }
+      </div>
+    `;
+    optionsContainer.insertAdjacentHTML("beforeend", optionHTML);
+
+    // Update add option button visibility
+    addOptionBtn.classList.toggle("hidden", optionCount + 1 >= 4);
+
+    // Regroup radio buttons after adding new option
+    regroupRadioButtons(optionsContainer, "newCorrectAnswer");
+  }
+
+  // Clear form and add initial options
+  function clearForm() {
+    document.getElementById("newQuestion").value = "";
+    optionsContainer.innerHTML = "";
+    // errorContainer.classList.add("hidden");
+
+    // Add only one set of initial options
+    addOptionInput();
+    addOptionInput();
+
+    // Ensure radio buttons are properly grouped
+    const radioButtons = optionsContainer.querySelectorAll(
+      'input[type="radio"]'
+    );
+    radioButtons.forEach((radio) => {
+      radio.name = "newCorrectAnswer"; // Ensure all radios share the same name
+    });
+  }
+
+  // Add button handlers
+  if (createModal) {
+    // Close and Cancel buttons
+    createModal.querySelectorAll(".close-btn, .cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        createModal.classList.add("hidden");
+        clearForm();
+      });
+    });
+
+    // Add option button
+    if (addOptionBtn) {
+      addOptionBtn.addEventListener("click", addOptionInput);
+    }
+
+    // Remove option buttons
+    optionsContainer.addEventListener("click", (e) => {
+      const removeBtn = e.target.closest(".remove-option");
+      if (removeBtn) {
+        const optionsCount =
+          optionsContainer.querySelectorAll(".option-input").length;
+        if (optionsCount > 2) {
+          removeBtn.closest(".option-input").remove();
+          addOptionBtn.classList.toggle("hidden", optionsCount - 1 >= 4);
+          // Regroup remaining radio buttons
+          regroupRadioButtons(optionsContainer, "newCorrectAnswer");
+        }
+      }
+    });
+
+    // Save button
+    if (saveBtn) {
+      saveBtn.addEventListener("click", () => {
+        const questionData = validateNewQuestion();
+        if (!questionData) return;
+
+        const questions = getQuestionsFromLocalStorage();
+        const currentLevel = getCurrentLevel();
+        const category = getCurrentCategory();
+
+        // Ensure the structure exists
+        if (!questions[currentLevel].categories[category]) {
+          questions[currentLevel].categories[category] = [];
+        }
+
+        // Add new question
+        questions[currentLevel].categories[category].push(questionData);
+        saveQuestionsToLocalStorage(questions);
+
+        // Show create toast (green)
+        showToast(
+          `Question "${questionData.question}" successfully created`,
+          TOAST_TYPES.CREATE
+        );
+
+        // Re-render and close modal
+        renderQuestion(currentLevel, getCurrentTabIndex(), category);
+        createModal.classList.add("hidden");
+        clearForm();
       });
     }
   }
 
-  function updateOptionLabels() {
-    optionsContainer.querySelectorAll(".new-option").forEach((input, index) => {
-      input.placeholder = `Enter option ${index + 1}`;
-    });
-  }
-
-  function clearForm() {
-    document.getElementById("newQuestion").value = "";
-    optionsContainer.innerHTML = "";
-    errorContainer.textContent = "";
-    // Add two default options
-    addOptionInput();
-    addOptionInput();
-  }
-
-  function showError(message) {
-    errorContainer.textContent = message;
-    errorContainer.classList.remove("hidden");
-  }
-
-  function validateInputs() {
-    const questionText = document.getElementById("newQuestion").value.trim();
-    const options = Array.from(optionsContainer.querySelectorAll(".new-option"))
-      .map((input) => input.value.trim())
-      .filter(Boolean);
-    const selectedAnswer = document.querySelector(
-      'input[name="newCorrectAnswer"]:checked'
-    );
-
-    // Clear previous errors
-    errorContainer.textContent = "";
-
-    if (!questionText) {
-      showError("Please enter a question");
-      return null;
-    }
-
-    if (options.length < 2) {
-      showError("Please provide at least 2 options");
-      return null;
-    }
-
-    if (options.some((option) => !option)) {
-      showError("Please fill in all options");
-      return null;
-    }
-
-    if (!selectedAnswer) {
-      showError("Please select the correct answer");
-      return null;
-    }
-
-    const correctAnswer = options[selectedAnswer.value];
-
-    return {
-      id: Date.now(),
-      question: questionText,
-      options: options,
-      answer: correctAnswer,
-    };
-  }
-
-  // Event Listeners
-  addOptionBtn.addEventListener("click", () => {
-    addOptionInput();
-  });
-
-  saveBtn.addEventListener("click", () => {
-    const newQuestion = validateInputs();
-    if (!newQuestion) return;
-
-    const questions = getQuestionsFromLocalStorage();
-    const currentLevel = 0;
-    const category = getCurrentCategory();
-
-    // Ensure the structure exists
-    if (!questions[currentLevel]) {
-      questions[currentLevel] = { categories: {} };
-    }
-    if (!questions[currentLevel].categories[category]) {
-      questions[currentLevel].categories[category] = [];
-    }
-
-    // Add new question
-    questions[currentLevel].categories[category].push(newQuestion);
-
-    // Save to localStorage
-    saveQuestionsToLocalStorage(questions);
-
-    // Get current tab index
-    const currentTabIndex = Array.from(tabs).findIndex((tab) =>
-      tab.classList.contains("active")
-    );
-
-    // Re-render the current view
-    renderQuestion(currentLevel, currentTabIndex, category);
-
-    // Close modal and clear form
-    createModal.classList.add("hidden");
-    clearForm();
-  });
-
-  // Initialize form with default options
+  // Initialize the form
   clearForm();
+
+  // Add radio change handler to the container
+  optionsContainer.addEventListener("change", (e) => {
+    if (e.target.type === "radio") {
+      // Unselect all other radio buttons
+      optionsContainer
+        .querySelectorAll('input[type="radio"]')
+        .forEach((radio) => {
+          if (radio !== e.target) {
+            radio.checked = false;
+          }
+        });
+
+      // Update correct answer styling
+      optionsContainer.querySelectorAll(".option-input").forEach((div) => {
+        div.classList.remove("is-correct");
+      });
+      e.target.closest(".option-input").classList.add("is-correct");
+    }
+  });
+}
+
+function validateNewQuestion() {
+  const questionInput = document.getElementById("newQuestion");
+  const optionsContainer = document.getElementById("newOptionsContainer");
+
+  const question = questionInput.value.trim();
+  const options = Array.from(optionsContainer.querySelectorAll(".option")).map(
+    (input) => input.value.trim()
+  );
+  const selectedAnswer = optionsContainer.querySelector(
+    'input[name="newCorrectAnswer"]:checked'
+  );
+
+  if (!question) {
+    showToast("Please enter a question", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (options.length < 2) {
+    showToast("Please provide at least 2 options", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (options.some((opt) => !opt)) {
+    showToast("Please fill in all options", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  if (!selectedAnswer) {
+    showToast("Please select the correct answer", TOAST_TYPES.ERROR);
+    return null;
+  }
+
+  return {
+    question,
+    options,
+    answer: options[selectedAnswer.value],
+  };
+}
+
+function addRadioHandlers(container) {
+  container.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      container.querySelectorAll(".option-input").forEach((div) => {
+        div.classList.remove("is-correct");
+      });
+      e.target.closest(".option-input").classList.add("is-correct");
+    });
+  });
 }
 
 function addQuestionEventListeners(level, category) {
@@ -961,47 +1084,34 @@ function addQuestionEventListeners(level, category) {
   */
   document.querySelectorAll(".edit-btn").forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      handleEdit(index); // Pass the index of the question
+      window.handleEdit(index, getCurrentLevel(), getCurrentCategory());
     });
   });
   // Delete button handlers
-  document.querySelectorAll(".delete-btn").forEach((btn) => {
+  document.querySelectorAll(".delete-btn").forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      const index = parseInt(btn.dataset.index);
-
-      // Store the index for use when confirming deletion
-      document.getElementById("confirmDelete").dataset.index = index;
-
-      // Show delete modal
-      document.getElementById("deleteModal").classList.remove("hidden");
+      handleDelete(index, getCurrentLevel(), getCurrentCategory());
     });
   });
 
   // Close buttons for modals
   document.querySelectorAll(".close-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      btn.closest(".modal").classList.add("hidden");
+      const modal = btn.closest(".modal");
+      if (modal.id === "createModal") {
+        clearForm(); // Clear create form
+      }
+      modal.classList.add("hidden");
     });
   });
 
   // Confirm delete handler
   document.getElementById("confirmDelete").addEventListener("click", () => {
-    const index = parseInt(
-      document.getElementById("confirmDelete").dataset.index
-    );
-    const questions = getQuestionsFromLocalStorage();
-
-    // Remove the question
-    questions[level].categories[category].splice(index, 1);
-    saveQuestionsToLocalStorage(questions);
-
-    // Re-render and hide modal
-    renderQuestion(
-      level,
-      Array.from(tabs).findIndex((tab) => tab.classList.contains("active")),
-      category
-    );
-    document.getElementById("deleteModal").classList.add("hidden");
+    const btn = document.getElementById("confirmDelete");
+    const index = parseInt(btn.dataset.index);
+    const level = parseInt(btn.dataset.level);
+    const category = btn.dataset.category;
+    handleDelete(index, level, category);
   });
 }
 
@@ -1040,35 +1150,94 @@ function handleDelete(index) {
 }
 
 function initializeDeleteHandler() {
+  const deleteModal = document.getElementById("deleteModal");
   const confirmDelete = document.getElementById("confirmDelete");
-  if (confirmDelete) {
-    confirmDelete.addEventListener("click", () => {
-      const index = parseInt(confirmDelete.dataset.index);
-      const level = parseInt(confirmDelete.dataset.level);
-      const category = confirmDelete.dataset.category;
 
-      // Get questions
-      const questions = getQuestionsFromLocalStorage();
-
-      // Remove question
-      questions[level].categories[category].splice(index, 1);
-
-      // Save updated questions
-      saveQuestionsToLocalStorage(questions);
-
-      // Re-render questions
-      renderQuestion(level, getCurrentTabIndex(), category);
-
-      // Close modal
-      document.getElementById("deleteModal").classList.add("hidden");
+  if (deleteModal) {
+    // Close and Cancel buttons
+    deleteModal.querySelectorAll(".close-btn, .cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        deleteModal.classList.add("hidden");
+      });
     });
+
+    // Confirm delete button
+    if (confirmDelete) {
+      confirmDelete.addEventListener("click", () => {
+        // Get stored data attributes
+        const index = parseInt(confirmDelete.getAttribute("data-index"));
+        const level = parseInt(confirmDelete.getAttribute("data-level"));
+        const category = confirmDelete.getAttribute("data-category");
+
+        // Debug log to verify values
+        console.log("Attempting to delete:", { index, level, category });
+
+        // Validate that we have all required values
+        if (isNaN(index) || isNaN(level) || !category) {
+          console.error("Missing required delete parameters:", {
+            index,
+            level,
+            category,
+          });
+          return;
+        }
+
+        try {
+          // Get questions
+          const questions = getQuestionsFromLocalStorage();
+
+          // Validate the structure exists
+          if (!questions[level]?.categories?.[category]) {
+            throw new Error("Invalid question structure");
+          }
+
+          // Remove question
+          questions[level].categories[category].splice(index, 1);
+
+          // Save updated questions
+          saveQuestionsToLocalStorage(questions);
+
+          // Re-render questions
+          renderQuestion(level, getCurrentTabIndex(), category);
+
+          // Close modal
+          deleteModal.classList.add("hidden");
+        } catch (error) {
+          console.error("Error during deletion:", error);
+        }
+      });
+    }
   }
+}
+
+// Helper function to ensure we always get a valid questions structure
+function getQuestionsFromLocalStorage() {
+  const questions = localStorage.getItem("questions");
+  if (!questions) {
+    // Return default structure if localStorage is empty
+    const defaultStructure = Array(6)
+      .fill()
+      .map(() => ({
+        categories: {
+          Grammaire: [],
+          Compréhension: [],
+          Vocabulaire: [],
+        },
+      }));
+    localStorage.setItem("questions", JSON.stringify(defaultStructure));
+    return defaultStructure;
+  }
+  return JSON.parse(questions);
 }
 
 // Helper function to get current tab index
 function getCurrentTabIndex() {
-  const tabs = document.querySelectorAll(".tab");
-  return Array.from(tabs).findIndex((tab) => tab.classList.contains("active"));
+  const tabs = document.querySelectorAll("#questions-section .tab");
+  const activeTab = document.querySelector("#questions-section .tab.active");
+  if (!activeTab) return 0;
+
+  const index = Array.from(tabs).indexOf(activeTab);
+  return index !== -1 ? index : 0;
 }
 
 // Helper function to validate question data
@@ -1090,4 +1259,93 @@ function validateQuestionData(data) {
     return false;
   }
   return true;
+}
+
+// Add this function to create and show toasts
+function showToast(message, type = TOAST_TYPES.CREATE) {
+  const toastContainer =
+    document.getElementById("toast-container") || createToastContainer();
+
+  const toast = document.createElement("div");
+  toast.className = `fixed right-0 transform translate-x-full transition-all duration-300 ease-in-out 
+    flex items-center gap-3 p-4 rounded-l-lg shadow-lg max-w-sm mt-16 mr-0 z-50 ${getToastStyles(
+      type
+    )}`;
+
+  const icon = getToastIcon(type);
+
+  toast.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <p class="flex-1 text-sm font-medium">${message}</p>
+  `;
+
+  toastContainer.appendChild(toast);
+
+  // Trigger entrance animation
+  setTimeout(() => {
+    toast.classList.remove("translate-x-full");
+    toast.classList.add("translate-x-0");
+  }, 100);
+
+  // Remove toast after delay
+  setTimeout(() => {
+    toast.classList.remove("translate-x-0");
+    toast.classList.add("translate-x-full");
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+
+function createToastContainer() {
+  const container = document.createElement("div");
+  container.id = "toast-container";
+  container.className = "fixed top-0 right-0 flex flex-col gap-2 p-4 z-50";
+  document.body.appendChild(container);
+  return container;
+}
+
+function getToastStyles(type) {
+  switch (type) {
+    case TOAST_TYPES.CREATE:
+      return "bg-green-50 text-green-700 border-l-4 border-green-500";
+    case TOAST_TYPES.UPDATE:
+      return "bg-blue-50 text-blue-700 border-l-4 border-blue-500";
+    case TOAST_TYPES.DELETE:
+      return "bg-red-50 text-red-700 border-l-4 border-red-500";
+    case TOAST_TYPES.ERROR:
+      return "bg-yellow-50 text-yellow-700 border-l-4 border-yellow-500";
+    default:
+      return "bg-gray-50 text-gray-700 border-l-4 border-gray-500";
+  }
+}
+
+function getToastIcon(type) {
+  switch (type) {
+    case TOAST_TYPES.CREATE:
+      return `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>`;
+    case TOAST_TYPES.UPDATE:
+      return `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>`;
+    case TOAST_TYPES.DELETE:
+      return `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>`;
+    case TOAST_TYPES.ERROR:
+      return `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>`;
+  }
+}
+
+// Add this new helper function to regroup radio buttons
+function regroupRadioButtons(container, groupName) {
+  const radioButtons = container.querySelectorAll('input[type="radio"]');
+  radioButtons.forEach((radio, index) => {
+    radio.name = groupName;
+    radio.value = index;
+  });
 }
