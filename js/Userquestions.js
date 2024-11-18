@@ -215,7 +215,7 @@ function saveanswerinLocalstorage(chosenAnswer) {
   userAccount[index].levels[nevueName][categorie].responses.push(
     infoOfQuestion
   );
-
+  userAccount[index].levels[nevueName].date = new Date().toISOString();
   localStorage.setItem("userAccount", JSON.stringify(userAccount));
 }
 
@@ -408,7 +408,10 @@ function calculateAndSaveTotalScore() {
     (totalQuestionsGrammaire +
       totalQuestionsVocabulaire +
       totalQuestionsCompréhension);
-  // Calculate total score from all categories
+      if(userAccount[index].levels[nevueName].noteNiveau>6){
+        userAccount[index].levels[nevueName].valide=true;
+      }
+ // Calculate total score from all categories
   const noteOfneveux = userAccount[index].levels[nevueName].noteNiveau;
   // Save total score to noteNiveau
   // userAccount[index].levels[nevueName].noteNiveau = totalScore

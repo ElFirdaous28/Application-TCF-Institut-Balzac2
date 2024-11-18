@@ -1,5 +1,6 @@
-const listUsers = JSON.parse(localStorage.getItem('users'));
+const listUsers = JSON.parse(localStorage.getItem('userAccount'));
 const usersList = document.getElementById('usersList');
+
 
 listUsers.forEach(user => {   
     usersList.innerHTML+=`<div onclick="reportByUser(event)" data-user-id=${user.id} class="flex items-center ml-8 px-8 py-2 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer">${user.username}</div>`;
