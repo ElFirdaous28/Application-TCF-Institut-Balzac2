@@ -1,15 +1,16 @@
 let numbreOfQuestion = 1;
 let maxOfQuestin = 10;
-let timer = 10; //10s
+let timer = 10; //10s 
 let nevueIndex; // 1 2 3
 let nevueName; // A1 A2 ..
 let categorie;
 let indexOFQ = 0;
-let Chrono = 7; //chrono 7s
+let Chrono = 20; //chrono 20s
 let noteOFuser = 0; // note of user in categori /10
 let noteTotaleOFlevel = 0; // note of user in level somme of all categore /3 = x /10
 let tentative = 0;
 let date;
+
 
 function selectQuestions() {
   // btn of all neveux
@@ -46,7 +47,7 @@ function selectQuestions() {
     categorie = "Grammaire";
     StartQueez();
 
-    Chrono = 7;
+    Chrono = 20;
     indexOFQ = 0;
     numbreOfQuestion = 1;
 
@@ -56,7 +57,7 @@ function selectQuestions() {
     categorie = "Vocabulaire";
     StartQueez();
 
-    Chrono = 7;
+    Chrono = 20;
     indexOFQ = 0;
     numbreOfQuestion = 1;
 
@@ -66,7 +67,7 @@ function selectQuestions() {
     categorie = "Compréhension";
     StartQueez();
 
-    Chrono = 7;
+    Chrono = 20;
     indexOFQ = 0;
     numbreOfQuestion = 1;
 
@@ -105,30 +106,34 @@ function StartQueez() {
   divOfquez.classList.toggle("hidden");
   Select_level.classList.toggle("hidden");
 }
-
+let arrayOfquestion ;
 function AfficheeQuestion() {
   statrSecons();
-
+  
   let NumberOfQuestion = document.getElementById("NumberOfQuestion");
   let QuestionDiv = document.querySelector(".QuestionDiv");
   let divOfOptions = document.getElementById("divOfOptions");
 
   let questionsFromLocalsrotage = JSON.parse(localStorage.getItem("questions"));
   //   console.log(questionsFromLocalsrotage[nevue].categories[categorie][indexOFQ]);
-
+  
+  if(indexOFQ == 0) {
+     arrayOfquestion =  shuffle(questionsFromLocalsrotage[nevue].categories[categorie]); ;
+  }
+  
   const totalQuestions =
     questionsFromLocalsrotage[nevue].categories[categorie].length;
 
   NumberOfQuestion.textContent = numbreOfQuestion + "/" + totalQuestions;
   QuestionDiv.textContent =
-    questionsFromLocalsrotage[nevue].categories[categorie][indexOFQ].question;
+  arrayOfquestion[indexOFQ].question;
   QuestionDiv.id =
-    questionsFromLocalsrotage[nevue].categories[categorie][indexOFQ].id;
+  arrayOfquestion[indexOFQ].id;
 
   let alloptines = "";
-  questionsFromLocalsrotage[nevue].categories[categorie][
-    indexOFQ
-  ].options.forEach((element, index) => {
+  let optis =shuffle(arrayOfquestion[indexOFQ].options ) ;
+
+  optis.forEach((element, index) => {
     alloptines += `<button   id="${index}"
                 class="answers w-full max-w-96 text-start mb-3 pl-5 h-9 rounded-full border-2 border-[#BFCFE7] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]"
                
@@ -154,7 +159,7 @@ function ChoosetheAnswer() {
       //
       if (
         span.textContent ==
-        questionsFromLocalStorage[nevue].categories[categorie][indexOFQ].answer
+        arrayOfquestion[indexOFQ].answer
       ) {
         noteOFuser++;
       }
@@ -209,7 +214,7 @@ function saveanswerinLocalstorage(chosenAnswer) {
   let infoOfQuestion = {
     questionId: parseInt(QuestionDiv.id),
     chosenAnswer: chosenAnswer,
-    time: 7 - parseInt(timer.textContent),
+    time: 20  - parseInt(timer.textContent),
   };
 
   userAccount[index].levels[nevueName][categorie].responses.push(
@@ -223,6 +228,7 @@ function Timer() {
   let timer = document.getElementById("timer");
   timer.textContent = Chrono;
   Chrono--;
+  changeColorOfdivOfTimer()
   if (Chrono < 0) {
     let questionsFromLocalsrotage = JSON.parse(
       localStorage.getItem("questions")
@@ -248,7 +254,7 @@ function goTonextQuetion() {
   clearInterval(intervalId);
   numbreOfQuestion++;
   indexOFQ++;
-  Chrono = 7;
+  Chrono = 20;
   AfficheeQuestion();
 }
 
@@ -336,7 +342,7 @@ function saveTimeoutData() {
   let infoOfquestion = {
     questionId: parseInt(QuestionDiv.id),
     chosenAnswer: "", // Indicating no answer was selected
-    time: 7, // Full time used
+    time: 20, // Full time used
   };
 
   userAccount[index].levels[nevueName][categorie].responses.push(
@@ -475,3 +481,39 @@ function openOtherneveu() {
   
 }
 openOtherneveu();
+
+function changeColorOfdivOfTimer(){
+  let divOftimer = document.getElementById("timer") ;
+  let divOfcoloroFTimer = document.getElementById("divOfTimerColor") ;
+
+  const percentage = ( parseInt(divOftimer.textContent) *100) / 20;
+
+  divOfcoloroFTimer.style.width = `${percentage}%`;
+
+    divOfcoloroFTimer.classList.add("bg-[#525CEB]") ;
+ 
+  if (parseInt(divOftimer.textContent)<= 5) {
+    divOfcoloroFTimer.classList.remove('bg-[#525CEB]');
+    divOfcoloroFTimer.classList.add('bg-red-500');
+}
+else{
+  divOfcoloroFTimer.classList.add("bg-[#525CEB]") ; 
+  divOfcoloroFTimer.classList.remove('bg-red-500');
+}
+
+}
+
+function shuffle(array) {
+  
+  let shuffledArray = [...array];
+  
+  // Fisher-Yates (Knuth) Shuffle Algorithm
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+     
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  
+  return shuffledArray;
+}
+

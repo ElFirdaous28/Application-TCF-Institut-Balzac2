@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../tailwind.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    
+</head>
+<body>
+    <div
+    id="quiz_container"
+    class="w-full flex items-center justify-center "
+  >
+    <div
+      class="question pt-9 h-screen flex flex-col gap-3 lg:gap-11 md:gap-11 w-full"
+    >
+      <!-- timer -->
+      <div>
+        <div
+          id="timer"
+          class="w-32 bg-[#525CEB] text-2xl text-white float-right text-center rounded-full mr-0 lg:mr-44 md:mr-44"
+        >
+          7
+        </div>
+      </div>
+      <!-- question card -->
+      <div
+        class="w-11/12 lg:w-2/3 md:w-2/3 self-center border-2 border-[#BFCFE7] rounded-2xl py-10 flex flex-col items-center text-[#3D3B40]"
+      >
+        <!-- number of quesion -->
+        <div class="text-2xl mb-5">
+          Question <span id="NumberOfQuestion">
+        </div>
+        <div
+          class="relative h-3 w-4/5 border-2 border-[#525CEB] rounded-full mb-10"
+        >
+          <div
+            style="width: 5%"
+            class="absolute inset-0 bg-[#525CEB] rounded-full"
+          ></div>
+        </div>
+
+        <div class="w-11/12 lg:w-1/3 md:w-1/3">
+          <!-- question -->
+          <p  class=" QuestionDiv text-xl text-center mb-10">
+            Quel est le bon pronom pour remplacer 'Les enfants' ?
+          </p>
+          <!-- answers -->
+          <div id="divOfOptions" class="felx flex-col">
+            <button
+              class="answers w-full max-w-96 text-start mb-3 pl-5 h-9 rounded-full border-2 border-[#BFCFE7] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]"
+              disabled=""
+            >
+              a- <span>Elle</span>
+            </button>
+            <button
+              class="answers w-full max-w-96 text-start mb-3 pl-5 h-9 rounded-full border-2 border-[#BFCFE7] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]"
+              disabled=""
+            >
+              b- <span>Elles</span>
+            </button>
+            <button
+              class="answers w-full max-w-96 text-start mb-3 pl-5 h-9 rounded-full border-2 border-[#BFCFE7] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]"
+              disabled=""
+            >
+              c- <span>Ils</span>
+            </button>
+            <button
+              class="answers w-full max-w-96 text-start mb-3 pl-5 h-9 rounded-full border-2 border-[#BFCFE7] hover:text-white hover:bg-[#525CEB] hover:border-[#525CEB]"
+              disabled=""
+            >
+              d- <span>Il</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- buttons stop quiz & next question -->
+      <div
+        class="self-center w-4/5 flex flex-col lg:flex-row md:flex-row justify-between text-xl"
+      >
+        <button
+          class="border-2 border-[#BFCFE7] rounded-full px-5 pt-1 pb-2 text-[#3D3B40]"
+        >
+          Arrêter Le Test
+        </button>
+        <button
+          id="next_question"
+          class="hidden border-2 bg-[#525CEB] rounded-full px-5 pt-1 pb-2 text-white"
+        >
+          Question Suivante →
+        </button>
+        <button
+          id="see_result"
+          class="border-2 bg-[#525CEB] rounded-full px-5 pt-1 pb-2 text-white"
+        >
+          Voir Le Résultat
+        </button>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
