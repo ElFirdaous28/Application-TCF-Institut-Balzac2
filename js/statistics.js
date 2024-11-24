@@ -1,224 +1,7 @@
 let  questions = []
-async function loadData() {
-    const response = await fetch('../questions.json');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data; 
-}
-
-async function init() {
-    try {
-        questions = await loadData();
-        localStorage.setItem('questions', JSON.stringify(questions));
-        // questions = getRandomQuestions(questions, numberOfQuestions);
-    } catch (error) {
-        console.error('Error loading data:', error);
-    }
-}
-
-init();
-
-
-const users = [
-    {
-        id: 'user1',
-        username: 'user1',
-        levels: [
-            {
-                level: 'A1',
-                tentative: 2,
-                date: Date.now(),
-                noteNiveau: 10,
-                GrammerCat: {
-                    valide: false,
-                    noteCat:7,
-                    responses: [
-                        { questionId: 1, chosenAnswer: "suis", time: 10 },
-                        { questionId: 2, chosenAnswer: "", time: 20 },
-                        { questionId: 3, chosenAnswer: "ont", time: 5 },
-                        { questionId: 4, chosenAnswer: "allez", time: 0 },
-                        { questionId: 5, chosenAnswer: "mangent", time: 0 }
-                    ]
-                },
-                VocabulaireCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 6, chosenAnswer: "froid", time: 0 },
-                        { questionId: 7, chosenAnswer: "adieu", time: 0 },
-                        { questionId: 8, chosenAnswer: "grand", time: 0 },
-                        { questionId: 9, chosenAnswer: "voiture", time: 0 },
-                        { questionId: 10, chosenAnswer: "gros", time: 0 }
-                    ]
-                },
-                ComprehensionCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 11, chosenAnswer: "salutation", time: 0 },
-                        { questionId: 12, chosenAnswer: "voisin", time: 0 },
-                        { questionId: 13, chosenAnswer: "écouter", time: 0 },
-                        { questionId: 14, chosenAnswer: "bienvenue", time: 0 },
-                        { questionId: 15, chosenAnswer: "manger", time: 0 }
-                    ]
-                }
-            },
-            {
-                level: 'A2',
-                tentative: 0,
-                date: Date.now(),
-                noteNiveau: 9,
-                GrammerCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 16, chosenAnswer: "étais", time: 0 },
-                        { questionId: 17, chosenAnswer: "finis", time: 0 },
-                        { questionId: 18, chosenAnswer: "vais", time: 0 },
-                        { questionId: 19, chosenAnswer: "mangent", time: 0 },
-                        { questionId: 20, chosenAnswer: "faisons", time: 0 }
-                    ]
-                },
-                VocabulaireCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 21, chosenAnswer: "froid", time: 0 },
-                        { questionId: 22, chosenAnswer: "adieu", time: 0 },
-                        { questionId: 23, chosenAnswer: "grand", time: 0 },
-                        { questionId: 24, chosenAnswer: "voiture", time: 0 },
-                        { questionId: 25, chosenAnswer: "gros", time: 0 }
-                    ]
-                },
-                ComprehensionCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 26, chosenAnswer: "salutation", time: 0 },
-                        { questionId: 27, chosenAnswer: "voisin", time: 0 },
-                        { questionId: 28, chosenAnswer: "écouter", time: 0 },
-                        { questionId: 29, chosenAnswer: "bienvenue", time: 0 },
-                        { questionId: 30, chosenAnswer: "manger", time: 0 }
-                    ]
-                }
-            },
-            {
-                level: 'B1',
-                tentative: 0,
-                date: Date.now(),
-                noteNiveau: 0,
-                GrammerCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: []
-                },
-                VocabulaireCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: []
-                },
-                ComprehensionCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: []
-                }
-            },
-        ]
-    },
-    {
-        id: 'user2',
-        username: 'ABC',
-        levels: [
-            {
-                level: 'A1',
-                tentative: 3,
-                date: new Date('2024-11-12'),
-                noteNiveau: 10,
-                GrammerCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 1, chosenAnswer: "est", time: 0 },
-                        { questionId: 2, chosenAnswer: "suis", time: 0 },
-                        { questionId: 3, chosenAnswer: "ont", time: 0 },
-                        { questionId: 4, chosenAnswer: "allez", time: 0 },
-                        { questionId: 5, chosenAnswer: "mangent", time: 0 }
-                    ]
-                },
-                VocabulaireCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 6, chosenAnswer: "froid", time: 0 },
-                        { questionId: 7, chosenAnswer: "adieu", time: 0 },
-                        { questionId: 8, chosenAnswer: "grand", time: 0 },
-                        { questionId: 9, chosenAnswer: "voiture", time: 0 },
-                        { questionId: 10, chosenAnswer: "gros", time: 0 }
-                    ]
-                },
-                ComprehensionCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 11, chosenAnswer: "salutation", time: 0 },
-                        { questionId: 12, chosenAnswer: "voisin", time: 0 },
-                        { questionId: 13, chosenAnswer: "écouter", time: 0 },
-                        { questionId: 14, chosenAnswer: "bienvenue", time: 0 },
-                        { questionId: 15, chosenAnswer: "manger", time: 0 }
-                    ]
-                }
-            },
-            {
-                level: 'A2',
-                tentative: 0,
-                date: Date.now(),
-                noteNiveau: 0,
-                GrammerCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 16, chosenAnswer: "étais", time: 0 },
-                        { questionId: 17, chosenAnswer: "finis", time: 0 },
-                        { questionId: 18, chosenAnswer: "vais", time: 0 },
-                        { questionId: 19, chosenAnswer: "mangent", time: 0 },
-                        { questionId: 20, chosenAnswer: "faisons", time: 0 }
-                    ]
-                },
-                VocabulaireCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 21, chosenAnswer: "froid", time: 0 },
-                        { questionId: 22, chosenAnswer: "adieu", time: 0 },
-                        { questionId: 23, chosenAnswer: "grand", time: 0 },
-                        { questionId: 24, chosenAnswer: "voiture", time: 0 },
-                        { questionId: 25, chosenAnswer: "gros", time: 0 }
-                    ]
-                },
-                ComprehensionCat: {
-                    valide: false,
-                    noteCat:0,
-                    responses: [
-                        { questionId: 26, chosenAnswer: "salutation", time: 0 },
-                        { questionId: 27, chosenAnswer: "voisin", time: 0 },
-                        { questionId: 28, chosenAnswer: "écouter", time: 0 },
-                        { questionId: 29, chosenAnswer: "bienvenue", time: 0 },
-                        { questionId: 30, chosenAnswer: "manger", time: 0 }
-                    ]
-                }
-            },
-        ]
-    }
-];
-
-
-// Save the users object to localStorage
-localStorage.setItem("users", JSON.stringify(users));
 
 // Retrieve and parse the users object from localStorage
-const storedUsers = JSON.parse(localStorage.getItem("users"));
+const storedUsers = JSON.parse(localStorage.getItem("userAccount"))||[];
 
 
 // Function to display users score
@@ -296,9 +79,7 @@ function sortByLevel() {
     // Sort the userScoreBoxes based on the date
     userScoreBoxes.sort((a, b) => {
         const userTotal1 = a.getAttribute('data-total-score');
-        const userTotal2 = b.getAttribute('data-total-score');
-        console.log(userTotal1,userTotal2);
-        
+        const userTotal2 = b.getAttribute('data-total-score');        
 
         // Compare total scores based on the selected option
         if (levelSelect === "low") {            
@@ -316,31 +97,39 @@ function sortByLevel() {
    
 }
 
-function userTotalScoreCalculator(user){
-    let userTotalScore=0;
-    for (let i=0; i<user.levels.length-1;i++) {
-        userTotalScore+=user.levels[i].noteNiveau;
-        if (user.levels[i].noteNiveau === 0) {
-            break;
-        }  
+function userTotalScoreCalculator(user) {
+    let userTotalScore = 0;
+
+    // Loop through each level (e.g., "A1", "A2", "B1")
+    for (let level in user.levels) {
+        userTotalScore += user.levels[level].noteNiveau;
     }
+
     return userTotalScore;
 }
 
-
-
 function getLastNote(user) {
-    for (let i = user.levels.length - 1; i >= 0; i--) {
-        const level = user.levels[i];
-        if (level.noteNiveau !== 10 && i<user.levels.length) {
+    if (!user.levels || typeof user.levels !== "object") {
+        return null; // Return null if levels is not a valid object
+    }
+
+    // Get all level keys (e.g., "A1", "A2") in natural order
+    const levelsKeys = Object.keys(user.levels);
+
+    for (let key of levelsKeys) {
+        const level = user.levels[key];
+
+        // Check the `valide` property directly
+        if (!level.valide) {
             return {
                 noteNiveau: level.noteNiveau,
-                level: level.level,
+                level: key, // Use the level key (e.g., "A1")
                 date: level.date
             };
-        }  
+        }
     }
-    return null;  // Return null if no valid note is found
+
+    return null; // Return null if all levels are valid
 }
 // format date
 function formatDateToMMDDYYYY(date) {
@@ -388,17 +177,18 @@ function levelsStatistics(){
 levelsStatistics();
 
 // calculate number of tentatives in a level
-function tentativesByLevel(l){
+function tentativesByLevel(l) {
     let levelTentativ = 0;
-    storedUsers.forEach((user)=>{
-        user.levels.forEach((level)=>{
-            if(level.level===l){
-                levelTentativ+=level.tentative;
-            }
-        });
+    storedUsers.forEach((user) => {
+        // Check if the level exists in the user.levels object
+        const level = user.levels[l];  // Access the level by key
+        if (level) {
+            levelTentativ += level.tentative; // Accumulate the tentative count
+        }
     });
-    return levelTentativ;    
+    return levelTentativ;
 }
+
 // calculate number of users at this level
 function usersAtLevel(l){
     let usersAtLevel=0;
@@ -411,28 +201,12 @@ function usersAtLevel(l){
     return usersAtLevel;
 }
 
-// calculate number of users succeed a level
-function usersSucceed(l){
+function usersSucceed(l) {
     let usersSucceed = 0;
-    storedUsers.forEach((user)=>{
-        user.levels.forEach((level)=>{
-            if(level.level===l && level.noteNiveau===10){
-                usersSucceed++;
-            }
-        });
+    storedUsers.forEach((user) => {
+        if (user.levels[l] && user.levels[l].valide===true) {
+            usersSucceed++; // Increment if the user succeeded at this level (noteNiveau === 10)
+        }
     });
-    return usersSucceed;    
-}
-
-
-
-// report by user
-function reportByUser(event){
-    const clickedUser = event.target;
-    const currentUser = clickedUser.getAttribute('data-user-id');    
-    localStorage.setItem("currentUser",currentUser);
-
-    if (currentUser) {
-       window.location.href="user_score.html"
-    }
+    return usersSucceed;
 }

@@ -24,7 +24,7 @@
                 </div>
         
                 <nav class="mt-10">
-                    <a href="AdminQuestions.html" class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" id="questions-nav">
+                    <a href="AdminQuestions.html" class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" id="questions-nav">
                         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,7 +33,7 @@
                         <span class="mx-3">Questions</span>
                     </a>
 
-                    <a href="statistiques_tableau_bord.html" class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25">
+                    <a href="statistiques_tableau_bord.html" class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -163,36 +163,174 @@
                     </div>
                 </header>
                 <main class="flex-1 overflow-y-auto">
-                  <div class="max-w-4xl mx-auto">
-                    <h1 class="text-2xl font-bold text-[#3D3B40] my-8">Statistiques Générales et Tableau de Bord</h1>
-                    <!-- taux par neveau -->
-                    <div id="levels_boxes_container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-10 mb-24 text-[#3D3B40]">
-                        <!-- level boxes will appear here -->
+                    <!-- Questions Management Section -->
+                    <div id="questions-section" class="container px-6 py-8 mx-auto">
+                        <div class="flex flex-col">
+                            <!-- Level Selection -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-700 mb-4">Select Level</h3>
+                                <div class="grid grid-cols-6 gap-4">
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">A1</button>
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">A2</button>
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">B1</button>
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">B2</button>
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">C1</button>
+                                    <button
+                                        class="level-btn px-6 py-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">C2</button>
+                                </div>
+                            </div>
+
+                            <!-- Category Tabs -->
+                            <div class="bg-white rounded-lg shadow-sm">
+                                <div class="flex border-b border-gray-300">
+                                    <div
+                                        class="tab cursor-pointer px-6 py-4 border-b-4 border-transparent hover:border-indigo-500 active:border-indigo-500 active:text-indigo-500">
+                                        Grammaire
+                                    </div>
+                                    <div
+                                        class="tab cursor-pointer px-6 py-4 border-b-4 border-transparent hover:border-indigo-500 active:border-indigo-500 active:text-indigo-500">
+                                        Compréhension
+                                    </div>
+                                    <div
+                                        class="tab cursor-pointer px-6 py-4 border-b-4 border-transparent hover:border-indigo-500 active:border-indigo-500 active:text-indigo-500">
+                                        Vocabulaire
+                                    </div>
+                                </div>
+
+                                <!-- Questions Container -->
+                                <div class="content-container p-6">
+                                    <!-- Content will be dynamically loaded here -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row items-center mb-10">
-                        <input id="username_search"  onchange="searchUser()" type="text" placeholder="Recherche par nom" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto focus:border-[#BFCFE7] focus:text-[#3D3B40] focus:outline-none"">
-                        <select id="date_select"  onchange="sortByDate()" type="date" class="border border-[#BFCFE7] rounded-lg p-2 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-[#3D3B40] px-3">
-                            <option value="">----------</option>
-                            <option value="recente">Plus Recente</option>
-                            <option value="ancienne">Plus Ancienne</option>
-                        </select>
-                        
-                        <select id="level_select"  onchange="sortByLevel()"  class="border border-[#BFCFE7] rounded-lg p-2 w-full sm:w-auto text-[#3D3B40] focus:border-[#BFCFE7] focus:text-[#3D3B40] px-3">
-                            <option value="">----------</option>
-                            <option value="high">Niveau Eleve</option>
-                            <option value="low">Niveau Bas</option>
-                        </select>
+
+                    <!-- Create Modal -->
+                    <div id="createModal"
+                        class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-md bg-white">
+                            <div class="flex justify-between items-center border-b pb-3">
+                                <h3 class="text-lg font-semibold text-gray-900">Create New Question</h3>
+                                <button class="close-btn text-gray-400 hover:text-gray-500">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Question Text</label>
+                                    <textarea id="newQuestion" rows="3"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        placeholder="Enter your question here..."></textarea>
+                                </div>
+
+                                <div id="newOptionsContainer" class="options-container mb-4">
+                                    <!-- Options will be added here dynamically -->
+                                </div>
+
+                                <button id="addOptionButton"
+                                    class="mt-2 flex items-center gap-2 text-[#525CEB] hover:text-[#6A64DA]">
+                                    <i class="fas fa-plus"></i> Add Option
+                                </button>
+
+                                <!-- <div id="errorContainer" class="hidden mt-3 text-sm text-red-600"></div> -->
+                            </div>
+
+                            <div class="flex justify-end gap-3 mt-4 pt-3 border-t">
+                                <button
+                                    class="close-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button id="saveNewQuestion"
+                                    class="px-4 py-2 bg-[#525CEB] hover:bg-[#6A64DA] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                                    Save Question
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-[#3D3B40] mb-4">Cliquez sur un utilisateur pour voir son score.</p>
-                    <div id="users_score" class="space-y-4 mb-20 ">
-                        <!-- users's last score will appear here -->
+
+                    <!-- Edit Modal -->
+                    <div id="editModal"
+                        class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-md bg-white">
+                            <div class="flex justify-between items-center border-b pb-3">
+                                <h3 class="text-lg font-semibold text-gray-900">Edit Question</h3>
+                                <button class="close-btn text-gray-400 hover:text-gray-500">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Question Text</label>
+                                    <textarea id="question" rows="3"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        placeholder="Enter your question here..."></textarea>
+                                </div>
+
+                                <div id="optionsContainer" class="options-container mb-4">
+                                    <!-- Options will be added here dynamically -->
+                                </div>
+
+                                <button id="addEditOption"
+                                    class="mt-2 flex items-center gap-2 text-[#525CEB] hover:text-[#6A64DA]">
+                                    <i class="fas fa-plus"></i> Add Option
+                                </button>
+
+                                <!-- <div id="errorContainer" class="hidden mt-3 text-sm text-red-600"></div> -->
+                            </div>
+
+                            <div class="flex justify-end gap-3 mt-4 pt-3 border-t">
+                                <button
+                                    class="close-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button id="saveChanges"
+                                    class="px-4 py-2 bg-[#525CEB] hover:bg-[#6A64DA] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Delete Modal -->
+                    <div id="deleteModal"
+                        class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="relative mx-auto p-5 border w-[400px] shadow-lg rounded-md bg-white">
+                            <div class="mt-3 text-center">
+                                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                                    <i class="fas fa-exclamation-triangle text-red-600"></i>
+                                </div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Delete Question</h3>
+                                <div class="mt-2 px-7 py-3">
+                                    <p class="text-sm text-gray-500">
+                                        Are you sure you want to delete this question? This action cannot be undone.
+                                    </p>
+                                </div>
+                                <div class="flex justify-center gap-3 mt-4">
+                                    <button
+                                        class="close-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                                        Cancel
+                                    </button>
+                                    <button id="confirmDelete"
+                                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
     </div>
     </body>
     <script src="../js/sidebar.js"></script>
-    <script src="../js/statistics.js"></script>
+    <script src="../js/test.js"></script>
+
 </html>

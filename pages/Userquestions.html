@@ -20,6 +20,7 @@
   <body
     class="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 flex content-center items-center"
   >
+ 
     <!-- section of selct level -->
     <div id="Select_level" class="w-full flex items-center justify-center">
       <div
@@ -28,7 +29,7 @@
         <h1 class="text-3xl font-extrabold text-gray-800 mb-6">
           Choisissez le Test de Langue
         </h1>
-        <p class="text-gray-600 mb-8">
+        <p class="text-gray-600 mb-8">   
           Sélectionnez votre niveau pour commencer le test
         </p>
         <div class="flex justify-around gap-5 mb-8">
@@ -100,7 +101,7 @@
             id="timer"
             class="w-32 bg-[#525CEB] text-2xl text-white float-right text-center rounded-full mr-0 lg:mr-44 md:mr-44"
           >
-            00:18
+            20
           </div>
         </div>
         <!-- question card -->
@@ -109,12 +110,13 @@
         >
           <!-- number of quesion -->
           <div class="text-2xl mb-5">
-            Question <span id="NumberOfQuestion">10</span>/10
+            Question <span id="NumberOfQuestion">
           </div>
           <div
             class="relative h-3 w-4/5 border-2 border-[#525CEB] rounded-full mb-10"
           >
             <div
+            id="divOfTimerColor"
               style="width: 100%"
               class="absolute inset-0 bg-[#525CEB] rounded-full"
             ></div>
@@ -156,7 +158,7 @@
         </div>
 
         <!-- buttons stop quiz & next question -->
-        <div
+        <!-- <div
           class="self-center w-4/5 flex flex-col lg:flex-row md:flex-row justify-between text-xl"
         >
           <button
@@ -176,7 +178,7 @@
           >
             Voir Le Résultat
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
 
