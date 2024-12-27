@@ -16,7 +16,7 @@ function usersScores() {
                                                 <div>
                                                     <div id="username" class="font-bold text-[#3D3B40] mb-3">${user.username}</div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Niveau Actuel:</p> <span>${lastNoteData ? lastNoteData.level : 'N/A'}</span></div>
-                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Note:</p> <span>${lastNoteData ? lastNoteData.noteNiveau+'/10' : 'N/A'}</span></div>
+                                                    <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Note:</p> <span>${lastNoteData ? lastNoteData.noteNiveau.toFixed(2)+'/10' : 'N/A'}</span></div>
                                                     <div class="text-[#3D3B40] text-sm flex"><p class="w-36">Date:</p> <span id="niveau_actuel_date">${lastNoteData ? new Date(lastNoteData.date).toLocaleDateString() : 'pas encore commence'}</span></div>
                                                 </div>
                                             </div>
